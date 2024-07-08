@@ -12,7 +12,6 @@ build:
         --include-private-modules \
         --author dan@1howardcapital.com \
         --version $(fqr --version) \
-        --site-map-url https://fqr.readthedocs.io/en/stable
         --site-map-url https://fqr.readthedocs.io/en/latest
     - mkdir -p $READTHEDOCS_OUTPUT/html/
     - cp -r docs/html/ $READTHEDOCS_OUTPUT
