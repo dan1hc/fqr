@@ -1,3 +1,12 @@
+---
+name: feature request
+about: suggest a new feature
+title: 'feat: __short_feat_description__'
+labels: enhancement
+assignees: ''
+
+---
+
 ## Description
 
 *A clear and concise description of your idea.*

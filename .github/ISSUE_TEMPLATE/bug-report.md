@@ -1,3 +1,12 @@
+---
+name: bug report
+about: report a bug
+title: 'bug: __short_bug_description__'
+labels: bug
+assignees: ''
+
+---
+
 ## The problem
 
 _A clear and concise description of what the bug is._

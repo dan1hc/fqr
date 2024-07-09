@@ -39,7 +39,7 @@ __all__ = (
     'docs',
     )
 
-__version__ = '0.1.0'
+__version__ = '0.1.0-rc.1'
 
 from . import cli
 from . import core
