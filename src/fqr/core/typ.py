@@ -1,10 +1,13 @@
 """Core typing."""
 
 __all__ = (
-    'camelCaseString',
-    'snake_case_string',
+    'camelCase',
+    'snake_case',
+    'string',
+    'AnyType',
     'ArgsType',
     'Casing',
+    'CasingType',
     'PackageExceptionType',
     )
 
@@ -13,12 +16,12 @@ from . import lib
 if lib.t.TYPE_CHECKING:  # pragma: no cover
     from . import exc  # noqa: F401
 
-camelCaseString = lib.t.NewType('camelCaseString', str)
-snake_case_string = lib.t.NewType('snake_case_string', str)
+camelCase = lib.t.NewType('camelCase', str)
+snake_case = lib.t.NewType('snake_case', str)
 
 Casing = (
-    lib.t.Literal['camelCase']
-    | lib.t.Literal['snake_case']
+    camelCase
+    | snake_case
     )
 
 ArgsType = lib.TypeVarTuple('ArgsType')
@@ -28,3 +31,10 @@ PackageExceptionType = lib.t.TypeVar(
     bound='exc.BasePackageException',
     covariant=True,
     )
+
+AnyType = lib.t.TypeVar('AnyType')
+CasingType = lib.t.TypeVar('CasingType', bound=Casing)
+
+
+class string(str, lib.t.Generic[CasingType]):
+    """Protocol for a cased `str`."""

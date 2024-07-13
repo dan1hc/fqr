@@ -5,10 +5,11 @@ __all__ = (
     )
 
 from . import lib
+from . import typ
 
 
 class SupportedCasing(lib.enum.Enum):
     """Valid string casings."""
 
-    camelCase = 'camelCase'
-    snake_case = 'snake_case'
+    camelCase  = typ.camelCase
+    snake_case = typ.snake_case

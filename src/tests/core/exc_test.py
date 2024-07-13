@@ -20,7 +20,7 @@ class TestExceptions(unittest.TestCase):
 
         exc = fqr.core.exc.StringCasingError(
             Constants.INVALID_STRING_CASING_EXAMPLE,
-            fqr.core.typ.snake_case_string
+            fqr.core.typ.camelCase
             )
         dump = pickle.dumps(exc)
         deserialized_exc: fqr.core.exc.StringCasingError = pickle.loads(dump)

@@ -2,6 +2,7 @@
 
 __all__ = (
     'argparse',
+    'collections',
     'datetime',
     'enum',
     'functools',
@@ -11,11 +12,13 @@ __all__ = (
     't',
     'urllib',
     'Never',
+    'Self',
     'TypeVarTuple',
     'Unpack',
     )
 
 import argparse
+import collections.abc
 import datetime
 import enum
 import functools
@@ -26,6 +29,6 @@ import typing as t
 import urllib.parse
 
 if sys.version_info < (3, 11):  # pragma: no cover
-    from typing_extensions import Never, TypeVarTuple, Unpack  # noqa  # type: ignore
+    from typing_extensions import Never, Self, TypeVarTuple, Unpack  # noqa  # type: ignore
 else:  # pragma: no cover
-    from typing import Never, TypeVarTuple, Unpack
+    from typing import Never, Self, TypeVarTuple, Unpack
