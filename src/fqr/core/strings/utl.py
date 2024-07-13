@@ -1,4 +1,4 @@
-"""Core utility functions."""
+"""Strings utility functions."""
 
 __all__ = (
     'camel_case_to_snake_case',

@@ -1,4 +1,4 @@
-"""Core modules unit tests."""
+"""Core module unit tests."""
 
 __all__ = (
     'cns',

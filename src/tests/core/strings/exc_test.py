@@ -1,4 +1,4 @@
-"""Core exceptions unit tests."""
+"""Module exceptions unit tests."""
 
 import pickle
 import unittest
@@ -18,10 +18,12 @@ class TestExceptions(unittest.TestCase):
     def test_01_serialization(self):
         """Test multi-arg exc serializes correctly."""
 
-        exc = fqr.core.exc.StringCasingError(
+        exc = fqr.core.strings.exc.StringCasingError(
             Constants.INVALID_STRING_CASING_EXAMPLE,
-            fqr.core.typ.camelCase
+            fqr.core.strings.typ.camelCase
             )
         dump = pickle.dumps(exc)
-        deserialized_exc: fqr.core.exc.StringCasingError = pickle.loads(dump)
+        deserialized_exc: fqr.core.strings.exc.StringCasingError = (
+            pickle.loads(dump)
+            )
         self.assertTupleEqual(exc.args, deserialized_exc.args)

@@ -1,4 +1,4 @@
-"""Core objects."""
+"""Strings objects."""
 
 from . import lib
 

@@ -1,4 +1,4 @@
-"""Core utils unit tests."""
+"""Module utils unit tests."""
 
 import unittest
 
@@ -27,7 +27,7 @@ class TestUtils(unittest.TestCase):
         """Test camelCase validation."""
 
         self.assertFalse(
-            fqr.core.utl.isCamelCaseString(
+            fqr.core.strings.utl.isCamelCaseString(
                 Constants.VALID_CAMEL_STRING_EXAMPLES[-1]
                 )
             )
@@ -36,9 +36,9 @@ class TestUtils(unittest.TestCase):
         """Test case conversion."""
 
         self.assertTrue(
-            fqr.core.utl.is_snake_case_iterable(
+            fqr.core.strings.utl.is_snake_case_iterable(
                 [
-                    fqr.core.utl.camel_case_to_snake_case(string)
+                    fqr.core.strings.utl.camel_case_to_snake_case(string)
                     for string
                     in Constants.VALID_CAMEL_STRING_EXAMPLES
                     ]
@@ -50,9 +50,9 @@ class TestUtils(unittest.TestCase):
 
         self.assertRaises(
             TypeError,
-            lambda: fqr.core.utl.validate_casing(
+            lambda: fqr.core.strings.utl.validate_casing(
                 123,
-                fqr.core.enm.SupportedCasing.snake_case.value
+                fqr.core.strings.enm.SupportedCasing.snake_case.value
                 )
             )
 
@@ -60,10 +60,10 @@ class TestUtils(unittest.TestCase):
         """Test case validation asserts snake casing."""
 
         self.assertRaises(
-            fqr.core.exc.StringCasingError,
-            lambda: fqr.core.utl.validate_casing(
+            fqr.core.strings.exc.StringCasingError,
+            lambda: fqr.core.strings.utl.validate_casing(
                 Constants.INVALID_STRING_CASING_EXAMPLE,
-                fqr.core.enm.SupportedCasing.snake_case.value
+                fqr.core.strings.enm.SupportedCasing.snake_case.value
                 )
             )
 
@@ -71,10 +71,10 @@ class TestUtils(unittest.TestCase):
         """Test case validation asserts camel casing."""
 
         self.assertRaises(
-            fqr.core.exc.StringCasingError,
-            lambda: fqr.core.utl.validate_casing(
+            fqr.core.strings.exc.StringCasingError,
+            lambda: fqr.core.strings.utl.validate_casing(
                 Constants.INVALID_STRING_CASING_EXAMPLE,
-                fqr.core.enm.SupportedCasing.camelCase.value
+                fqr.core.strings.enm.SupportedCasing.camelCase.value
                 )
             )
 
@@ -82,7 +82,7 @@ class TestUtils(unittest.TestCase):
         """Test snake_case validation."""
 
         self.assertTrue(
-            fqr.core.utl.is_snake_case_iterable(
+            fqr.core.strings.utl.is_snake_case_iterable(
                 Constants.VALID_SNAKE_STRING_EXAMPLES
                 )
             )
@@ -91,7 +91,7 @@ class TestUtils(unittest.TestCase):
         """Test camelCase validation."""
 
         self.assertTrue(
-            fqr.core.utl.isCamelCaseIterable(
+            fqr.core.strings.utl.isCamelCaseIterable(
                 Constants.VALID_CAMEL_STRING_EXAMPLES
                 )
             )
@@ -100,7 +100,7 @@ class TestUtils(unittest.TestCase):
         """Test cname retrieval."""
 
         self.assertEqual(
-            fqr.core.utl.cname_for(
+            fqr.core.strings.utl.cname_for(
                 Constants.VALID_CAMEL_STRING_EXAMPLES[-1].strip('_'),
                 Constants.VALID_CAMEL_STRING_EXAMPLES
                 ),
@@ -111,7 +111,7 @@ class TestUtils(unittest.TestCase):
         """Test cname retrieval for a snake_case string."""
 
         self.assertEqual(
-            fqr.core.utl.cname_for(
+            fqr.core.strings.utl.cname_for(
                 Constants.VALID_SNAKE_STRING_EXAMPLES[0],
                 Constants.VALID_CAMEL_STRING_EXAMPLES
                 ),
@@ -122,7 +122,7 @@ class TestUtils(unittest.TestCase):
         """Test cname retrieval negative case returns None."""
 
         self.assertIsNone(
-            fqr.core.utl.cname_for(
+            fqr.core.strings.utl.cname_for(
                 Constants.INVALID_STRING_CASING_EXAMPLE,
                 Constants.VALID_CAMEL_STRING_EXAMPLES
                 )
@@ -132,8 +132,8 @@ class TestUtils(unittest.TestCase):
         """Test validation succeeds."""
 
         self.assertIsNone(
-            fqr.core.utl.validate_casing(
+            fqr.core.strings.utl.validate_casing(
                 Constants.VALID_SNAKE_STRING_EXAMPLES[0],
-                fqr.core.enm.SupportedCasing.snake_case.value
+                fqr.core.strings.enm.SupportedCasing.snake_case.value
                 )
             )

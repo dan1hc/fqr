@@ -1,4 +1,4 @@
-"""Core enumerations."""
+"""Strings enumerations."""
 
 __all__ = (
     'SupportedCasing',
