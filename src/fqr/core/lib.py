@@ -2,7 +2,6 @@
 
 __all__ = (
     'argparse',
-    'collections',
     'datetime',
     'enum',
     'functools',
@@ -18,7 +17,6 @@ __all__ = (
     )
 
 import argparse
-import collections.abc
 import datetime
 import enum
 import functools
