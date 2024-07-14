@@ -19,7 +19,7 @@ class Constants(cns.Constants):
     BoolTuple = (True, False, True, )
     BoundType = fqr.core.lib.t.TypeVar('BoundType', bound=int)
     ComplexStr = '1.134_12e+2-1.134_12e+2j'
-    ConstrainedType = fqr.core.lib.t.TypeVar('ConstrainedType', bool, str)
+    ConstrainedType = fqr.core.lib.t.TypeVar('ConstrainedType', bool, int)
     NestedDict = {'nesting': SimpleDict}
 
 
