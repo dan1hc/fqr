@@ -37,24 +37,43 @@ class Pattern:
     Unlike Google, does NOT allow for an optional uppercase character at \
     the end of the string.
 
-    Strings with moreThan32IndividualWords or \
+    Strings with more than32IndividualWords or \
     withWordsLongerThan128Characters will not be parsed.
 
     """
 
-    snake_case = lib.re.compile(r'^[a-z0-9_]{1,256}$')
+    snake_case = lib.re.compile(r'^[a-z0-9_]{1,4096}$')
     """
     Matches strict [lower] snake_case (i.e. python casing).
 
     ---
 
-    Strings longer than 256 characters will not be matched.
+    Strings longer than 4096 characters will not be matched.
 
     """
 
     NumberPattern = lib.re.compile(
-        r'^(([+-]?(([0-9](_?[0-9]){0,64})?(\.([0-9](_?[0-9]){0,64})?)?))+(e[+-]?([0-9](_?[0-9]){0,64})+)?)'  # noqa
-        r'(j|(([+-](([0-9](_?[0-9]){0,64})?(\.([0-9](_?[0-9]){0,64})?)?))+(e[+-]?([0-9](_?[0-9]){0,64})+)?j))?$'  # noqa
+        '^'
+        '('
+            r'[+-]?'
+            r'([0-9](_?[0-9]){0,63})?'
+            r'(\.)?'
+            r'[0-9](_?[0-9]){0,63}'
+            r'(e[+-]?[0-9](_?[0-9]){0,63})?'
+        ')'
+        '('
+            'j'
+            '|'
+            '('
+                r'[+-]'
+                r'([0-9](_?[0-9]){0,63})?'
+                r'(\.)?'
+                r'[0-9](_?[0-9]){0,63}'
+                r'(e[+-]?[0-9](_?[0-9]){0,63})?'
+                'j'
+            ')'
+        ')?'
+        '$'
         )
     """
     Matches integers, floats, scientific notation, and complex numbers.
