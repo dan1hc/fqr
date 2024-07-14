@@ -307,12 +307,12 @@ class TestUtils(unittest.TestCase):
             )
 
     def test_29_typevar_parse_constrained_again(self):
-        """Test `parse` on `tuple[ConstrainedType, ...]`."""
+        """Test `parse` on `tuple[AnotherConstrainedType, ...]`."""
 
         self.assertEqual(
             Constants.BoolTuple,
             fqr.core.codecs.utl.parse(
                 fqr.core.codecs.lib.json.dumps(Constants.BoolTuple),
-                tuple[Constants.ConstrainedType, ...]
+                tuple[Constants.AnotherConstrainedType, ...]
                 )
             )

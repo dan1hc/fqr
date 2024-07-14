@@ -79,7 +79,7 @@ omit = [
     ]
 
 [tool.pytest.ini_options]
-addopts = "--cov=fqr --cov-report=term -p no:warnings -x"
+addopts = "--cov=fqr --cov-report=term-missing -p no:warnings -x"
 testpaths = ["src/tests"]
 
 [tool.mypy]
