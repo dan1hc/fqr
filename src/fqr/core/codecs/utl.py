@@ -23,8 +23,6 @@ def try_decode(
 
     """
 
-    # TODO: include more decoders for str -> standardlib
-
     try:
         if isinstance(value, typings.utl.check.get_checkable_types(tp)):
             tp_value: typ.AnyType = value

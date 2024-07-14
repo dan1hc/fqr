@@ -20,6 +20,11 @@ class Constants(cns.Constants):
     BoundType = fqr.core.lib.t.TypeVar('BoundType', bound=int)
     ComplexStr = '1.134_12e+2-1.134_12e+2j'
     ConstrainedType = fqr.core.lib.t.TypeVar('ConstrainedType', bool, int)
+    AnotherConstrainedType = fqr.core.lib.t.TypeVar(
+        'AnotherConstrainedType',
+        int,
+        bool
+        )
     NestedDict = {'nesting': SimpleDict}
 
 
@@ -298,5 +303,16 @@ class TestUtils(unittest.TestCase):
             fqr.core.codecs.utl.parse(
                 fqr.core.codecs.lib.json.dumps(Constants.BoolTuple),
                 tuple[fqr.core.typ.AnyType, ...]
+                )
+            )
+
+    def test_29_typevar_parse_constrained_again(self):
+        """Test `parse` on `tuple[ConstrainedType, ...]`."""
+
+        self.assertEqual(
+            Constants.BoolTuple,
+            fqr.core.codecs.utl.parse(
+                fqr.core.codecs.lib.json.dumps(Constants.BoolTuple),
+                tuple[Constants.ConstrainedType, ...]
                 )
             )
