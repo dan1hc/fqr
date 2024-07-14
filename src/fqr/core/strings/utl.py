@@ -1,11 +1,12 @@
-"""Core utility functions."""
+"""Strings utility functions."""
 
 __all__ = (
     'camel_case_to_snake_case',
     'cname_for',
-    'isCamelCaseIterable',
     'is_snake_case_iterable',
     'is_snake_case_string',
+    'is_valid_number_str',
+    'isCamelCaseIterable',
     'isCamelCaseString',
     'snake_case_to_camel_case',
     'validate_casing',
@@ -20,7 +21,7 @@ from . import obj
 
 def isCamelCaseString(
     string: str
-    ) -> lib.t.TypeGuard[typ.camelCaseString]:
+    ) -> lib.t.TypeGuard[typ.string[typ.camelCase]]:
     """
     Check if `string` is valid `camelCase`.
 
@@ -44,7 +45,7 @@ def _isCamelCaseString(string: str) -> bool:
 
 def is_snake_case_string(
     string: str
-    ) -> lib.t.TypeGuard[typ.snake_case_string]:
+    ) -> lib.t.TypeGuard[typ.string[typ.snake_case]]:
     """
     Check if `string` is valid `snake_case`.
 
@@ -98,11 +99,11 @@ def validate_casing(
 
 @lib.functools.cache
 def snake_case_to_camel_case(
-    snake_case_string: typ.snake_case_string
-    ) -> typ.camelCaseString:
-    """Convert a valid `snake_case_string` to `camelCase`."""
+    snake_case_string: typ.string[typ.snake_case]
+    ) -> typ.string[typ.camelCase]:
+    """Convert a valid `str[snake_case]` to `str[camelCase]`."""
 
-    camelCaseString: typ.camelCaseString = (
+    camelCaseString: typ.string[typ.camelCase] = (
         obj.Pattern.SnakeToCamelReplacements.sub(
             lambda match: match.group()[-1].upper(),
             snake_case_string
@@ -114,11 +115,11 @@ def snake_case_to_camel_case(
 
 @lib.functools.cache
 def camel_case_to_snake_case(
-    camelCaseString: typ.camelCaseString
-    ) -> typ.snake_case_string:
-    """Convert a valid `camelCaseString` to `snake_case`."""
+    camelCaseString: typ.string[typ.camelCase]
+    ) -> typ.string[typ.snake_case]:
+    """Convert a valid `str[camelCase]` to `str[snake_case]`."""
 
-    snake_case_string: typ.snake_case_string = (
+    snake_case_string: typ.string[typ.snake_case] = (
         obj.Pattern.CamelToSnakeReplacements.sub(
             lambda match: '_' + match.group().lower(),
             camelCaseString
@@ -130,9 +131,9 @@ def camel_case_to_snake_case(
 
 def is_snake_case_iterable(
     strings: lib.t.Iterable[str]
-    ) -> lib.t.TypeGuard[lib.t.Iterable[typ.snake_case_string]]:
+    ) -> lib.t.TypeGuard[lib.t.Iterable[typ.string[typ.snake_case]]]:
     """
-    Check if all `strings` are `snake_case`.
+    Check if all `strings` are `str[snake_case]`.
 
     ---
 
@@ -150,9 +151,9 @@ def is_snake_case_iterable(
 
 def isCamelCaseIterable(
     strings: lib.t.Iterable[str]
-    ) -> lib.t.TypeGuard[lib.t.Iterable[typ.camelCaseString]]:
+    ) -> lib.t.TypeGuard[lib.t.Iterable[typ.string[typ.camelCase]]]:
     """
-    Check if all `strings` are `camelCase`.
+    Check if all `strings` are `str[camelCase]`.
 
     ---
 
@@ -170,22 +171,29 @@ def isCamelCaseIterable(
 
 def cname_for(
     string: str,
-    container: lib.t.Container
+    container: lib.t.Container[str]
     ) -> lib.t.Optional[str] | lib.Never:
     """
     Get the actual, canonical name for valid `string`, as contained in \
-    an arbitrary, valid `container`, agnostic of `string` casing and / or \
-    underscores.
+    an arbitrary, valid `Container[str]`, agnostic of `string` casing \
+    and / or underscores.
 
     ---
 
     ### Example Usage
 
     ```py
-    d = {'_id': 123}
+    d = {
+        '_id': 123,
+        '_meaning_of_life': 42
+        }
+
     cname_for(d, 'id')
-    >>>
     '_id'
+
+    cname_for(d, 'meaningOfLife')
+    42
+
     ```
 
     """
@@ -215,3 +223,13 @@ def cname_for(
         return camel_k
     else:
         return None
+
+
+def is_valid_number_str(any_str: str) -> bool:
+    """
+    Return `True` if python `str` is parsable as a valid \
+    `numbers.Number`.
+
+    """
+
+    return bool(obj.Pattern.NumberPattern.match(any_str))

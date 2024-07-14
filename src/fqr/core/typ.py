@@ -1,11 +1,17 @@
 """Core typing."""
 
 __all__ = (
-    'camelCaseString',
-    'snake_case_string',
+    'AnyDict',
+    'AnyOtherType',
+    'AnyOtherTypeCo',
+    'AnyType',
+    'AnyTypeCo',
     'ArgsType',
-    'Casing',
+    'NoneType',
+    'OptionalAnyDict',
+    'Primitive',
     'PackageExceptionType',
+    'Serial',
     )
 
 from . import lib
@@ -13,14 +19,26 @@ from . import lib
 if lib.t.TYPE_CHECKING:  # pragma: no cover
     from . import exc  # noqa: F401
 
-camelCaseString = lib.t.NewType('camelCaseString', str)
-snake_case_string = lib.t.NewType('snake_case_string', str)
-
-Casing = (
-    lib.t.Literal['camelCase']
-    | lib.t.Literal['snake_case']
+AnyDict = dict[str, lib.t.Any]
+NoneType = lib.types.NoneType  # type: ignore[valid-type]
+OptionalAnyDict = lib.t.Optional[dict[str, lib.t.Any]]
+Primitive = (
+    bool
+    | float
+    | int
+    | NoneType
+    | str
+    )
+Serial = (
+    Primitive
+    | dict['Serial', 'Serial']
+    | list['Serial']
     )
 
+AnyType = lib.t.TypeVar('AnyType')
+AnyOtherType = lib.t.TypeVar('AnyOtherType')
+AnyTypeCo = lib.t.TypeVar('AnyTypeCo', covariant=True)
+AnyOtherTypeCo = lib.t.TypeVar('AnyOtherTypeCo', covariant=True)
 ArgsType = lib.TypeVarTuple('ArgsType')
 
 PackageExceptionType = lib.t.TypeVar(

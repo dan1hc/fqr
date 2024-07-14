@@ -1,7 +1,7 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 
-const pattern = /^(Merge .*)|^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\(\w+\))?((?=:\s)|(?=!:\s))?(!)?(:\s\_\_.*\_\_)($|( *\n\n)(.+)?(\n\n)((resolve[ds]? \#\d+|fix(ed|es)? \#\d+|close[ds]? \#\d+)(, )?)+$)/;
+const pattern = /^([mM]erge .*)$|(^((build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)!?: \_\_(.+)\_\_)((\n\n(.+)\n\n)((BREAKING CHANGE|DEPRECATED)(: )(.+)\n\n(.+)\n\n\n)?(resolve[ds]? \#[A-Z0-9\-]+|fix(ed|es)? \#[A-Z0-9\-]+|close[ds]? \#[A-Z0-9\-]+)((, )(resolve[ds]? \#[A-Z0-9\-]+|fix(ed|es)? \#[A-Z0-9\-]+|close[ds]? \#[A-Z0-9\-]+))?)?$)|(^revert: ((build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)!?: \_\_(.+)\_\_)(\n\n(This reverts commit [a-z0-9]{40}\..*)\n\n)(fix(ed|es)? \#[A-Z0-9\-]+)((, )(fix(ed|es)? \#[A-Z0-9\-]+))?$)/;
 const restClient = github.getOctokit(core.getInput('token'));
 
 restClient.rest.pulls.listCommits(
@@ -13,7 +13,7 @@ restClient.rest.pulls.listCommits(
         }
     ).then((response) => {
         if (response.data.length >= 100) {
-            core.setFailed("Pull request must contain fewer than 100 commits.");
+            core.setFailed("Pull request must contain less than 100 commits.");
         } else {
             response.data.every((record) => {
                 var commit = record.commit;
