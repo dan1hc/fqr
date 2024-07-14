@@ -1,8 +1,13 @@
 """Strings enumerations."""
 
+from .. import enm
+
 __all__ = (
     'SupportedCasing',
+    *enm.__all__
     )
+
+from .. enm import *
 
 from . import lib
 from . import typ

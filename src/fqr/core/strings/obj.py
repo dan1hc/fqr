@@ -41,3 +41,16 @@ class Pattern:
 
     snake_case = lib.re.compile(r'^[a-z0-9_]+$')
     """Matches strict [lower] snake_case (i.e. python casing)."""
+
+    NumberPattern = lib.re.compile(
+        r'^(([+-]?(([0-9]+(_?[0-9]+)*)?(\.([0-9]+(_?[0-9]+)*)?)?))+(e[+-]?([0-9]+(_?[0-9]+)*)+)?)'  # noqa
+        r'(j|(([+-](([0-9]+(_?[0-9]+)*)?(\.([0-9]+(_?[0-9]+)*)?)?))+(e[+-]?([0-9]+(_?[0-9]+)*)+)?j))?$'  # noqa
+        )
+    """
+    Matches integers, floats, scientific notation, and complex numbers.
+
+    ---
+
+    Recognizes valid, pythonic underscore usage as well.
+
+    """

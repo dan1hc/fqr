@@ -3,9 +3,10 @@
 __all__ = (
     'camel_case_to_snake_case',
     'cname_for',
-    'isCamelCaseIterable',
     'is_snake_case_iterable',
     'is_snake_case_string',
+    'is_valid_number_str',
+    'isCamelCaseIterable',
     'isCamelCaseString',
     'snake_case_to_camel_case',
     'validate_casing',
@@ -222,3 +223,13 @@ def cname_for(
         return camel_k
     else:
         return None
+
+
+def is_valid_number_str(any_str: str) -> bool:
+    """
+    Return `True` if python `str` is parsable as a valid \
+    `numbers.Number`.
+
+    """
+
+    return bool(obj.Pattern.NumberPattern.match(any_str))

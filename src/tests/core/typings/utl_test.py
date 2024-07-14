@@ -10,15 +10,6 @@ from . import cns
 class Constants(cns.Constants):
     """Constant values specific to unit tests in this file."""
 
-    VALID_CAMEL_STRING_EXAMPLES = (
-        'upperSnakeCaseString100SureFift337aGood',
-        '_privateValidCamelCaseString'
-        )
-    VALID_SNAKE_STRING_EXAMPLES = (
-        'upper_snake_case_string_100_sure_fift_337a_good',
-        '_snake_case_string_'
-        )
-
 
 class TestUtils(unittest.TestCase):
     """Fixture for testing."""
@@ -27,7 +18,7 @@ class TestUtils(unittest.TestCase):
         """Test `str` to `ForwardRef` casting."""
 
         self.assertIsInstance(
-            fqr.core.typings.utl.parse_str_to_ref('int', False),
+            fqr.core.typings.utl.hint.parse_str_to_ref('int', False),
             fqr.core.lib.t.ForwardRef
             )
 
@@ -35,7 +26,11 @@ class TestUtils(unittest.TestCase):
         """Test `str` to `type` casting."""
 
         self.assertIs(
-            fqr.core.typings.utl.resolve_type('int', globals(), locals()),
+            fqr.core.typings.utl.hint.resolve_type(
+                'int',
+                globals(),
+                locals()
+                ),
             int
             )
 
@@ -43,7 +38,7 @@ class TestUtils(unittest.TestCase):
         """Test `ForwardRef` handling for types not yet resolvable."""
 
         self.assertIsInstance(
-            fqr.core.typings.utl.resolve_type('Unresolvable'),
+            fqr.core.typings.utl.hint.resolve_type('Unresolvable'),
             fqr.core.lib.t.ForwardRef
             )
 
@@ -51,13 +46,45 @@ class TestUtils(unittest.TestCase):
         """Test `ForwardRef` handling for types with args."""
 
         self.assertIs(
-            fqr.core.typings.utl.resolve_type(
+            fqr.core.typings.utl.hint.resolve_type(
                 'Mockery[tuple[int, ...]]',
                 globals(),
                 locals()
                 ),
             Mockery[tuple[int, ...]]
             )
+
+    def test_05_anti_is_array_type(self):
+        """Test `is_array_type`."""
+
+        self.assertFalse(fqr.core.typings.utl.check.is_array_type(None))
+
+    def test_06_anti_is_variadic_array_type(self):
+        """Test `is_variadic_array_type`."""
+
+        self.assertFalse(
+            fqr.core.typings.utl.check.is_variadic_array_type(None)
+            )
+
+    def test_07_anti_is_mapping_type(self):
+        """Test `is_mapping_type`."""
+
+        self.assertFalse(fqr.core.typings.utl.check.is_mapping_type(None))
+
+    def test_08_anti_is_none_type(self):
+        """Test `is_none_type`."""
+
+        self.assertFalse(fqr.core.typings.utl.check.is_none_type(None))
+
+    def test_09_anti_is_number_type(self):
+        """Test `is_number_type`."""
+
+        self.assertFalse(fqr.core.typings.utl.check.is_number_type(None))
+
+    def test_10_anti_is_bool_type(self):
+        """Test `is_bool_type`."""
+
+        self.assertFalse(fqr.core.typings.utl.check.is_bool_type(None))
 
 
 class Mockery(fqr.core.lib.t.Generic[fqr.core.typ.AnyType]):

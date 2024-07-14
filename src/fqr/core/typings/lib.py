@@ -2,6 +2,13 @@
 
 from .. import lib
 
-__all__ = lib.__all__
+__all__ = (
+    'abc',
+    'numbers',
+    *lib.__all__
+    )
+
+import abc
+import numbers
 
 from .. lib import *

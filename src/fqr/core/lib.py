@@ -5,10 +5,12 @@ __all__ = (
     'datetime',
     'enum',
     'functools',
+    'itertools',
     'os',
     're',
     'sys',
     't',
+    'types',
     'urllib',
     'Never',
     'Self',
@@ -20,10 +22,12 @@ import argparse
 import datetime
 import enum
 import functools
+import itertools
 import os
 import re
 import sys
 import typing as t
+import types
 import urllib.parse
 
 if sys.version_info < (3, 11):  # pragma: no cover

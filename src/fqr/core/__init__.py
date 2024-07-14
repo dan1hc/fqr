@@ -19,6 +19,8 @@ import fqr
 
 __all__ = (
     'cns',
+    'codecs',
+    'enm',
     'exc',
     'lib',
     'strings',
@@ -27,6 +29,8 @@ __all__ = (
     )
 
 from . import cns
+from . import codecs
+from . import enm
 from . import exc
 from . import lib
 from . import strings
