@@ -19,18 +19,20 @@ import fqr
 
 __all__ = (
     'cns',
+    'codecs',
     'enm',
     'exc',
     'lib',
-    'obj',
+    'strings',
     'typ',
-    'utl',
+    'typings',
     )
 
 from . import cns
+from . import codecs
 from . import enm
 from . import exc
 from . import lib
-from . import obj
+from . import strings
 from . import typ
-from . import utl
+from . import typings

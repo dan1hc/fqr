@@ -1,14 +1,23 @@
 """Core enumerations."""
 
 __all__ = (
-    'SupportedCasing',
+    'Boolean',
+    'NoneAlias',
     )
 
 from . import lib
 
 
-class SupportedCasing(lib.enum.Enum):
-    """Valid string casings."""
+class Boolean(lib.enum.Enum):
+    """Boolean Enumeration."""
 
-    camelCase = 'camelCase'
-    snake_case = 'snake_case'
+    true  = True
+    false = False
+
+
+class NoneAlias(lib.enum.Enum):
+    """Nones Enumeration."""
+
+    null = None
+    none = None
+    nan  = None
