@@ -13,7 +13,7 @@ restClient.rest.pulls.listCommits(
         }
     ).then((response) => {
         if (response.data.length >= 100) {
-            core.setFailed("Pull request must contain fewer than 100 commits.");
+            core.setFailed("Pull request must contain less than 100 commits.");
         } else {
             response.data.every((record) => {
                 var commit = record.commit;
