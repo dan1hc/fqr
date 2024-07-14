@@ -22,8 +22,9 @@ class Constants(cns.Constants):
     ConstrainedType = fqr.core.lib.t.TypeVar('ConstrainedType', bool, int)
     AnotherConstrainedType = fqr.core.lib.t.TypeVar(
         'AnotherConstrainedType',
-        int,
-        bool
+        tuple[int] | tuple[str],
+        tuple[bool] | tuple[int],
+        tuple[float] | tuple[bool] | tuple[int] | bool
         )
     NestedDict = {'nesting': SimpleDict}
 
