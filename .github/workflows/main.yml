@@ -43,7 +43,7 @@ jobs:
   setup:
     needs: [validate]
     runs-on: ubuntu-latest
-    if: ${{ needs.validate.outputs.is_testing_required }} == 'true'
+    if: needs.validate.outputs.is_testing_required == 'true'
     outputs:
       python-versions: ${{ steps.setVariables.outputs.python-versions }}
     steps:
@@ -53,7 +53,7 @@ jobs:
   lint:
     needs: [validate, setup]
     runs-on: ubuntu-latest
-    if: ${{ needs.validate.outputs.is_testing_required }} == 'true'
+    if: needs.validate.outputs.is_testing_required == 'true'
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python Latest
@@ -78,7 +78,7 @@ jobs:
             --exit-non-zero-on-fix
   test:
     needs: [validate, setup, lint]
-    if: ${{ needs.validate.outputs.is_testing_required }} == 'true'
+    if: needs.validate.outputs.is_testing_required == 'true'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -101,7 +101,7 @@ jobs:
         run: pytest --verbose
   release:
     needs: [validate]
-    if: ${{ needs.validate.outputs.is_semantic_release_required }} == 'true' && github.repository == 'dan1hc/fqr'
+    if: needs.validate.outputs.is_semantic_release_required == 'true' && github.repository == 'dan1hc/fqr'
     name: semantic release
     runs-on: ubuntu-latest
     concurrency: push
