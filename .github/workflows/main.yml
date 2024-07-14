@@ -7,35 +7,17 @@ on:
   pull_request:
     branches:
       - main
-    paths-ignore:
-      - './.github/**/*'
-      - './src/fqr/__init__.py'
-      - '.gitignore'
-      - '.pre-commit-config.yaml'
-      - '.readthedocs.yaml'
-      - 'CHANGELOG.md'
-      - 'CODE_OF_CONDUCT.md'
-      - 'CONTRIBUTING.md'
-      - 'LICENSE'
-      - 'pyproject.toml'
-      - 'README.md'
-      - 'SECURITY.md'
+    paths:
+      - '!**/*'
+      - '**/*.py'
+      - '!./src/fqr/__init__.py'
   push:
     branches:
       - main
-    paths-ignore:
-      - './.github/**/*'
-      - './src/fqr/__init__.py'
-      - '.gitignore'
-      - '.pre-commit-config.yaml'
-      - '.readthedocs.yaml'
-      - 'CHANGELOG.md'
-      - 'CODE_OF_CONDUCT.md'
-      - 'CONTRIBUTING.md'
-      - 'LICENSE'
-      - 'pyproject.toml'
-      - 'README.md'
-      - 'SECURITY.md'
+    paths:
+      - '!**/*'
+      - '**/*.py'
+      - '!./src/fqr/__init__.py'
 
 env:
   PY_VERSIONS: "[\"3.12\",\"3.11\",\"3.10\"]"
