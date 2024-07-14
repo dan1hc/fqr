@@ -23,11 +23,11 @@ class Pattern:
     """
 
     CamelToSnakeReplacements = lib.re.compile(
-        r'[A-Z0-9]([0-9]+|[a-z]+|([0-9][a-z])+)'
+        r'[A-Z0-9]([0-9]{0,128}|[a-z]+|([0-9][a-z])+)'
         )
     """Matches all Title Case and numeric components."""
 
-    camelCase = lib.re.compile(r'^[a-z]+((\d)|([A-Z0-9][a-z0-9]+))*$')
+    camelCase = lib.re.compile(r'^[a-z]+((\d)|([A-Z0-9][a-z0-9]{0,128}))*$')
     """
     Matches strict [lower] camelCase (i.e. RESTful casing) according to \
     the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html#s5.3-camel-case).
@@ -39,12 +39,12 @@ class Pattern:
 
     """
 
-    snake_case = lib.re.compile(r'^[a-z0-9_]+$')
+    snake_case = lib.re.compile(r'^[a-z0-9_]{0,256}$')
     """Matches strict [lower] snake_case (i.e. python casing)."""
 
     NumberPattern = lib.re.compile(
-        r'^(([+-]?(([0-9]+(_?[0-9]+)*)?(\.([0-9]+(_?[0-9]+)*)?)?))+(e[+-]?([0-9]+(_?[0-9]+)*)+)?)'  # noqa
-        r'(j|(([+-](([0-9]+(_?[0-9]+)*)?(\.([0-9]+(_?[0-9]+)*)?)?))+(e[+-]?([0-9]+(_?[0-9]+)*)+)?j))?$'  # noqa
+        r'^(([+-]?(([0-9]{0,128}(_?[0-9]{0,128})*)?(\.([0-9]{0,128}(_?[0-9]{0,128})*)?)?))+(e[+-]?([0-9]{0,128}(_?[0-9]{0,128})*)+)?)'  # noqa
+        r'(j|(([+-](([0-9]{0,128}(_?[0-9]{0,128})*)?(\.([0-9]{0,128}(_?[0-9]{0,128})*)?)?))+(e[+-]?([0-9]{0,128}(_?[0-9]{0,128})*)+)?j))?$'  # noqa
         )
     """
     Matches integers, floats, scientific notation, and complex numbers.
