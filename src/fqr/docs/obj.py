@@ -5,8 +5,6 @@ __all__ = (
     'Pattern',
     )
 
-from .. import __version__
-
 from .. import cli
 
 from . import cns
