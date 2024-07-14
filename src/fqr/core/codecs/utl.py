@@ -127,7 +127,7 @@ def parse(
         for dtype_candidate in valid_types[1:]:
             if not isinstance(parsed_value_or_err_ref, enm.ParseErrorRef):
                 break
-            else:
+            else:  # pragma: no cover
                 parsed_value_or_err_ref = parse(value, dtype_candidate)
         return parsed_value_or_err_ref
     elif isinstance(value, str):
