@@ -23,9 +23,6 @@ env:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    outputs:
-      is_semantic_release_required: ${{ steps.check-files.outputs.is_semantic_release_required }}
-      is_testing_required: ${{ steps.check-files.outputs.is_testing_required }}
     steps:
       - uses: actions/checkout@v4
       - id: install-npm-deps
@@ -35,15 +32,9 @@ jobs:
         if: github.event_name == 'pull_request'
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - id: check-files
-        uses: ./.github/actions/check-files
-        if: github.event_name == 'pull_request'
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
   setup:
     needs: [validate]
     runs-on: ubuntu-latest
-    if: needs.validate.outputs.is_testing_required == 'true'
     outputs:
       python-versions: ${{ steps.setVariables.outputs.python-versions }}
     steps:
@@ -53,7 +44,6 @@ jobs:
   lint:
     needs: [validate, setup]
     runs-on: ubuntu-latest
-    if: needs.validate.outputs.is_testing_required == 'true'
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python Latest
@@ -78,7 +68,6 @@ jobs:
             --exit-non-zero-on-fix
   test:
     needs: [validate, setup, lint]
-    if: needs.validate.outputs.is_testing_required == 'true'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -100,8 +89,8 @@ jobs:
       - name: pytest
         run: pytest --verbose
   release:
-    needs: [validate]
-    if: needs.validate.outputs.is_semantic_release_required == 'true' && github.repository == 'dan1hc/fqr'
+    needs: [validate, setup, lint, test]
+    if: github.repository == 'dan1hc/fqr'
     name: semantic release
     runs-on: ubuntu-latest
     concurrency: push
