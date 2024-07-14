@@ -7,14 +7,14 @@ on:
   pull_request:
     branches:
       - main
-    paths-ignore:
+    paths:
       - '!**/*'
       - '**/*.py'
       - '!./src/fqr/__init__.py'
   push:
     branches:
       - main
-    paths-ignore:
+    paths:
       - '!**/*'
       - '**/*.py'
       - '!./src/fqr/__init__.py'
