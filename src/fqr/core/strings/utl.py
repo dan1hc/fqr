@@ -5,6 +5,7 @@ __all__ = (
     'cname_for',
     'is_snake_case_iterable',
     'is_snake_case_string',
+    'is_valid_datetime_str',
     'is_valid_number_str',
     'isCamelCaseIterable',
     'isCamelCaseString',
@@ -172,7 +173,7 @@ def isCamelCaseIterable(
 def cname_for(
     string: str,
     container: lib.t.Container[str]
-    ) -> lib.t.Optional[str] | lib.Never:
+    ) -> lib.t.Optional[str]:
     """
     Get the actual, canonical name for valid `string`, as contained in \
     an arbitrary, valid `Container[str]`, agnostic of `string` casing \
@@ -225,11 +226,25 @@ def cname_for(
         return None
 
 
-def is_valid_number_str(any_str: str) -> bool:
+def is_valid_number_str(
+    any_str: str
+    ) -> lib.t.TypeGuard[typ.string[typ.numeric]]:
     """
     Return `True` if python `str` is parsable as a valid \
     `numbers.Number`.
 
     """
 
-    return bool(obj.Pattern.NumberPattern.match(any_str))
+    return bool(obj.Pattern.Number.match(any_str))
+
+
+def is_valid_datetime_str(
+    any_str: str
+    ) -> lib.t.TypeGuard[typ.string[typ.datetime]]:
+    """
+    Return `True` if python `str` is parsable as a valid \
+    `datetime`.
+
+    """
+
+    return bool(obj.Pattern.DateTime.match(any_str))

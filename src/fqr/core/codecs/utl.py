@@ -24,7 +24,19 @@ def try_decode(
     """
 
     try:
-        if isinstance(value, typings.utl.check.get_checkable_types(tp)):
+        if typings.utl.check.is_literal(tp):
+            literals = typings.utl.check.get_args(tp)
+            literal: typ.AnyType
+            if value in literals:
+                literal = value
+                return literal
+            literal_tps = (type(literal) for literal in literals)
+            for literal_tp in literal_tps:
+                literal = try_decode(value, literal_tp)
+                if literal in literals:
+                    return literal
+            return enm.ParseErrorRef.literal_decode
+        elif isinstance(value, typings.utl.check.get_checkable_types(tp)):
             tp_value: typ.AnyType = value
             return tp_value
         elif isinstance(value, str):
@@ -42,6 +54,23 @@ def try_decode(
                     return num_value
                 else:
                     return enm.ParseErrorRef.number_decode
+            elif (
+                (is_datetime_tp := typings.utl.check.is_datetime_type(tp))
+                or typings.utl.check.is_date_type(tp)
+                ):
+                if strings.utl.is_valid_datetime_str(value):
+                    dt = (
+                        lib.datetime.datetime.fromisoformat(value)
+                        .replace(tzinfo=lib.datetime.timezone.utc)
+                        )
+                    if is_datetime_tp:
+                        dt_value: typ.AnyType = dt
+                        return dt_value
+                    else:
+                        date_value: typ.AnyType = dt.date()
+                        return date_value
+                else:
+                    return enm.ParseErrorRef.datetime_decode
             elif typings.utl.check.is_none_type(tp):
                 if value.lower() in enm.NoneAlias._member_names_:
                     none: typ.AnyType = None

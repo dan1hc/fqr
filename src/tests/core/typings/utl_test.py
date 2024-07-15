@@ -86,6 +86,16 @@ class TestUtils(unittest.TestCase):
 
         self.assertFalse(fqr.core.typings.utl.check.is_bool_type(None))
 
+    def test_11_anti_is_datetime_type(self):
+        """Test `is_datetime_type`."""
+
+        self.assertFalse(fqr.core.typings.utl.check.is_datetime_type(None))
+
+    def test_12_anti_is_date_type(self):
+        """Test `is_date_type`."""
+
+        self.assertFalse(fqr.core.typings.utl.check.is_date_type(None))
+
 
 class Mockery(fqr.core.lib.t.Generic[fqr.core.typ.AnyType]):
     """An as yet undefined generic class for testing."""

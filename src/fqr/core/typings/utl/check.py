@@ -1,11 +1,15 @@
 """Type checking utility functions."""
 
 __all__ = (
+    'get_args',
     'get_checkable_types',
     'expand_types',
     'is_array',
     'is_array_type',
     'is_bool_type',
+    'is_date_type',
+    'is_datetime_type',
+    'is_literal',
     'is_mapping',
     'is_mapping_type',
     'is_none_type',
@@ -23,7 +27,7 @@ from .. import obj
 from .. import typ
 
 
-def _get_args(tp: lib.t.Any) -> tuple[lib.t.Any, ...]:
+def get_args(tp: lib.t.Any) -> tuple[lib.t.Any, ...]:
     """Wrapper for `lib.t.get_args`."""
 
     return lib.t.get_args(tp)
@@ -41,7 +45,6 @@ def get_type_args(
     tp: (
         obj.SupportsParams[lib.Unpack[typ.ArgsType]]
         | type[lib.t.Any]
-        # | obj.SupportsParams[lib.Unpack[tuple[lib.t.Any, ...]]]
         )
     ) -> (
         tuple[lib.Unpack[typ.ArgsType]]
@@ -52,9 +55,14 @@ def get_type_args(
 
     ---
 
-    ### Example
+    `Literals` will be returned as the types of their values.
+
+    #### Examples
 
     ```py
+    get_type_args(Literal[1])
+    (int, )
+
     get_type_args(tuple[str, int])
     (str, int, )
 
@@ -62,7 +70,13 @@ def get_type_args(
 
     """
 
-    return _get_args(tp)
+    return tuple(
+        type(arg)
+        if is_literal(tp)
+        else arg
+        for arg
+        in get_args(tp)
+        )
 
 
 @lib.t.overload
@@ -79,6 +93,10 @@ def get_checkable_types(
     """
     Get checkable origin lib.types, handling `Union` and `TypeVar` \
     expansions automatically.
+
+    ---
+
+    `Literals` will be returned as their values.
 
     """
 
@@ -110,11 +128,17 @@ def expand_types(
     Recursively get valid subtypes into flattened `tuple` from a \
     passed `type`, `Union`, or `TypeVar`.
 
+    ---
+
+    `Literals` will be returned as their values.
+
     """
 
     if is_union(any_tp):
         return tuple(
-            set(
+            tp
+            for tp
+            in set(
                 lib.itertools.chain.from_iterable(
                     expand_types(sub_tp)
                     for sub_tp
@@ -125,7 +149,9 @@ def expand_types(
     elif is_typevar(any_tp):
         if any_tp.__constraints__:
             return tuple(
-                set(
+                tp
+                for tp
+                in set(
                     lib.itertools.chain.from_iterable(
                         expand_types(sub_tp)
                         for sub_tp
@@ -137,6 +163,8 @@ def expand_types(
             return expand_types(any_tp.__bound__)
         else:
             return (object, )
+    elif is_literal(any_tp):
+        return (type(get_args(any_tp)[0]), )
     else:
         return (any_tp, )
 
@@ -161,7 +189,7 @@ def is_params_type(
         ]:
     """Return `True` if `tp` has type args."""
 
-    return bool(_get_args(tp))
+    return bool(get_args(tp))
 
 
 def is_typevar(
@@ -232,6 +260,45 @@ def is_ellipsis(
     if otps:
         return issubclass(otps[0], lib.types.EllipsisType)
     else:  # pragma: no cover
+        return False
+
+
+def is_literal(
+    tp: type[lib.t.Any] | lib.t.Any
+    ) -> lib.t.TypeGuard[typ.Literal]:
+    """Return `True` if `tp` is a `Literal`."""
+
+    otp = lib.t.get_origin(tp) or tp
+
+    return (
+        getattr(otp, '__name__', '') == 'Literal'
+        and getattr(otp, '__module__', '') == 'typing'
+        )
+
+
+def is_date_type(
+    tp: type[lib.t.Any] | lib.t.Any,
+    ) -> lib.t.TypeGuard[type[lib.datetime.date]]:
+    """Return `True` if `tp` is `datetime.date`."""
+
+    otps = get_checkable_types(tp)
+
+    if otps:
+        return issubclass(otps[0], lib.datetime.date)
+    else:
+        return False
+
+
+def is_datetime_type(
+    tp: type[lib.t.Any] | lib.t.Any,
+    ) -> lib.t.TypeGuard[type[lib.datetime.datetime]]:
+    """Return `True` if `tp` is `datetime.datetime`."""
+
+    otps = get_checkable_types(tp)
+
+    if otps:
+        return issubclass(otps[0], lib.datetime.datetime)
+    else:
         return False
 
 

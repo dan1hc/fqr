@@ -56,8 +56,10 @@ class ParseErrorRef(lib.enum.Enum):
     null_decode           = typ.ErrorRef(
         'Could not decode valid JSON string to python `None`.'
         )
-    py_decode             = typ.ErrorRef(
-        'Could not decode value to python `object`.'
+    datetime_decode       = typ.ErrorRef(
+        'Could not decode value to valid `datetime`.'
+        )
+    literal_decode        = typ.ErrorRef(
+        'Could not decode value to valid `Literal`.'
         )
     value_decode          = typ.ErrorRef('Could not decode invalid value.')
-

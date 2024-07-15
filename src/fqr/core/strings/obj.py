@@ -38,7 +38,7 @@ class Pattern:
     the end of the string.
 
     Strings with more than32IndividualWords or \
-    withWordsLongerThan128Characters will not be parsed.
+    withWordsLongerThan128Characters will not be matched.
 
     """
 
@@ -52,7 +52,24 @@ class Pattern:
 
     """
 
-    NumberPattern = lib.re.compile(
+    DateTime = lib.re.compile(
+        r'[0-9]{4}-[0-9]{2}-[0-9]{2}'
+        '('
+            r'[ T][0-9]{2}:[0-9]{2}:[0-9]{2}'
+            r'(\.([0-9]{1,6}))?'
+        ')?'
+        r'([+-][0-9]{2}:[0-9]{2})?'
+        )
+    """
+    Matches valid python `datetime` strings.
+
+    ---
+
+    Note: validity is determined by parsability `fromisoformat()`.
+
+    """
+
+    Number = lib.re.compile(
         '^'
         '('
             r'[+-]?'
