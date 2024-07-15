@@ -4,6 +4,9 @@ import unittest
 
 import fqr
 
+from fqr . core import codecs
+from fqr . core import lib
+
 from . import cns
 
 
@@ -17,16 +20,18 @@ class Constants(cns.Constants):
         }
     SimpleTuple = (1, 2, 3, )
     BoolTuple = (True, False, True, )
-    BoundType = fqr.core.lib.t.TypeVar('BoundType', bound=int)
+    BoundType = lib.t.TypeVar('BoundType', bound=int)
     ComplexStr = '1.134_12e+2-1.134_12e+2j'
-    ConstrainedType = fqr.core.lib.t.TypeVar('ConstrainedType', bool, int)
-    AnotherConstrainedType = fqr.core.lib.t.TypeVar(
+    ConstrainedType = lib.t.TypeVar('ConstrainedType', bool, int)
+    AnotherConstrainedType = lib.t.TypeVar(
         'AnotherConstrainedType',
         tuple[int] | tuple[str],
         tuple[bool] | tuple[int],
         tuple[float] | tuple[bool] | tuple[int] | bool
         )
     NestedDict = {'nesting': SimpleDict}
+    DateTime = lib.datetime.datetime.now(lib.datetime.timezone.utc)
+    Date = DateTime.date()
 
 
 class TestUtils(unittest.TestCase):
@@ -37,8 +42,8 @@ class TestUtils(unittest.TestCase):
 
         self.assertEqual(
             Constants.SimpleTuple,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.SimpleTuple),
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.SimpleTuple),
                 tuple[int, ...]
                 )
             )
@@ -48,8 +53,8 @@ class TestUtils(unittest.TestCase):
 
         self.assertEqual(
             Constants.SimpleDict,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.SimpleDict),
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.SimpleDict),
                 dict[str, tuple[int, ...]]
                 )
             )
@@ -59,8 +64,8 @@ class TestUtils(unittest.TestCase):
 
         self.assertNotEqual(
             Constants.SimpleTuple,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.BoolTuple),
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.BoolTuple),
                 tuple[Constants.BoundType, ...]
                 )
             )
@@ -70,8 +75,8 @@ class TestUtils(unittest.TestCase):
 
         self.assertEqual(
             Constants.BoolTuple,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.BoolTuple),
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.BoolTuple),
                 tuple[Constants.BoundType, ...]
                 )
             )
@@ -81,8 +86,8 @@ class TestUtils(unittest.TestCase):
 
         self.assertEqual(
             Constants.BoolTuple,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.BoolTuple),
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.BoolTuple),
                 tuple[Constants.ConstrainedType, ...]
                 )
             )
@@ -92,8 +97,8 @@ class TestUtils(unittest.TestCase):
 
         self.assertEqual(
             Constants.NestedDict,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.NestedDict),
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.NestedDict),
                 dict[str, dict[str, tuple[int, ...]]]
                 )
             )
@@ -101,27 +106,27 @@ class TestUtils(unittest.TestCase):
     def test_07_bool_parse(self):
         """Test `parse` on `bool`."""
 
-        self.assertIs(True, fqr.core.codecs.utl.parse('true', bool))
+        self.assertIs(True, codecs.utl.parse('true', bool))
 
     def test_08_anti_bool_parse(self):
         """Test `parse` on `bool`."""
 
         self.assertEqual(
-            fqr.core.codecs.enm.ParseErrorRef.bool_decode,
-            fqr.core.codecs.utl.parse('asdf', bool)
+            codecs.enm.ParseErrorRef.bool_decode,
+            codecs.utl.parse('asdf', bool)
             )
 
     def test_09_float_parse(self):
         """Test `parse` on `float`."""
 
-        self.assertEqual(1.8, fqr.core.codecs.utl.parse('1.8', float))
+        self.assertEqual(1.8, codecs.utl.parse('1.8', float))
 
     def test_10_anti_float_parse(self):
         """Test `parse` on `float`."""
 
         self.assertEqual(
-            fqr.core.codecs.enm.ParseErrorRef.number_decode,
-            fqr.core.codecs.utl.parse('asdf', float)
+            codecs.enm.ParseErrorRef.number_decode,
+            codecs.utl.parse('asdf', float)
             )
 
     def test_11_complex_parse(self):
@@ -129,34 +134,34 @@ class TestUtils(unittest.TestCase):
 
         self.assertEqual(
             complex(Constants.ComplexStr),
-            fqr.core.codecs.utl.parse(Constants.ComplexStr, complex)
+            codecs.utl.parse(Constants.ComplexStr, complex)
             )
 
     def test_12_none_parse(self):
         """Test `parse` on `None`."""
 
-        self.assertIsNone(fqr.core.codecs.utl.parse('null', type(None)))
+        self.assertIsNone(codecs.utl.parse('null', type(None)))
 
     def test_13_anti_none_parse(self):
         """Test `parse` on `None`."""
 
         self.assertEqual(
-            fqr.core.codecs.enm.ParseErrorRef.null_decode,
-            fqr.core.codecs.utl.parse('asdf', type(None))
+            codecs.enm.ParseErrorRef.null_decode,
+            codecs.utl.parse('asdf', type(None))
             )
 
     def test_14_union_parse(self):
         """Test `parse` on `int | str`."""
 
-        self.assertIsInstance(fqr.core.codecs.utl.parse('42', tuple[int] | int), int)
+        self.assertIsInstance(codecs.utl.parse('42', tuple[int] | int), int)
 
     def test_15_anti_tuple_parse(self):
         """Test `parse` on `tuple[int, ...]`."""
 
         self.assertEqual(
-            fqr.core.codecs.enm.ParseErrorRef.invalid_arr_decode,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.SimpleTuple),
+            codecs.enm.ParseErrorRef.invalid_arr_decode,
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.SimpleTuple),
                 tuple[frozenset, ...]
                 )
             )
@@ -166,8 +171,8 @@ class TestUtils(unittest.TestCase):
 
         self.assertEqual(
             Constants.SimpleTuple,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.SimpleTuple),
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.SimpleTuple),
                 tuple[int, int, int]
                 )
             )
@@ -176,9 +181,9 @@ class TestUtils(unittest.TestCase):
         """Test `parse` on `tuple[int, int, int]`."""
 
         self.assertEqual(
-            fqr.core.codecs.enm.ParseErrorRef.invalid_arr_len,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.SimpleTuple),
+            codecs.enm.ParseErrorRef.invalid_arr_len,
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.SimpleTuple),
                 tuple[int, int]
                 )
             )
@@ -187,9 +192,9 @@ class TestUtils(unittest.TestCase):
         """Test `parse` on `tuple[int, int, int]`."""
 
         self.assertEqual(
-            fqr.core.codecs.enm.ParseErrorRef.invalid_arr_decode,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.SimpleTuple),
+            codecs.enm.ParseErrorRef.invalid_arr_decode,
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.SimpleTuple),
                 tuple[frozenset, list, tuple]
                 )
             )
@@ -199,8 +204,8 @@ class TestUtils(unittest.TestCase):
 
         self.assertEqual(
             list(Constants.SimpleTuple),
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.SimpleTuple),
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.SimpleTuple),
                 list[int]
                 )
             )
@@ -209,17 +214,17 @@ class TestUtils(unittest.TestCase):
         """Test `parse` on `list[int]`."""
 
         self.assertEqual(
-            fqr.core.codecs.enm.ParseErrorRef.value_decode,
-            fqr.core.codecs.utl.parse('42', list[int])
+            codecs.enm.ParseErrorRef.value_decode,
+            codecs.utl.parse('42', list[int])
             )
 
     def test_21_anti_list_parse(self):
         """Test `parse` on `list[int]`."""
 
         self.assertEqual(
-            fqr.core.codecs.enm.ParseErrorRef.invalid_arr_decode,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.SimpleTuple),
+            codecs.enm.ParseErrorRef.invalid_arr_decode,
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.SimpleTuple),
                 list[frozenset]
                 )
             )
@@ -228,25 +233,25 @@ class TestUtils(unittest.TestCase):
         """Test `parse` on `list[int]`."""
 
         self.assertEqual(
-            fqr.core.codecs.enm.ParseErrorRef.invalid_json,
-            fqr.core.codecs.utl.parse('asdf', list[frozenset])
+            codecs.enm.ParseErrorRef.invalid_json,
+            codecs.utl.parse('asdf', list[frozenset])
             )
 
     def test_23_anti_dict_parse(self):
         """Test `parse` on `dict[str, tuple[int, ...]]`."""
 
         self.assertEqual(
-            fqr.core.codecs.enm.ParseErrorRef.invalid_json,
-            fqr.core.codecs.utl.parse('asdf', dict[str, tuple[int, ...]])
+            codecs.enm.ParseErrorRef.invalid_json,
+            codecs.utl.parse('asdf', dict[str, tuple[int, ...]])
             )
 
     def test_24_anti_dict_parse(self):
         """Test `parse` on `dict[str, tuple[int, ...]]`."""
 
         self.assertEqual(
-            fqr.core.codecs.enm.ParseErrorRef.invalid_keys_decode,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(
+            codecs.enm.ParseErrorRef.invalid_keys_decode,
+            codecs.utl.parse(
+                codecs.lib.json.dumps(
                     {
                         i: v
                         for (i, v)
@@ -261,9 +266,9 @@ class TestUtils(unittest.TestCase):
         """Test `parse` on `dict[str, tuple[int, ...]]`."""
 
         self.assertEqual(
-            fqr.core.codecs.enm.ParseErrorRef.invalid_values_decode,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(
+            codecs.enm.ParseErrorRef.invalid_values_decode,
+            codecs.utl.parse(
+                codecs.lib.json.dumps(
                     {
                         k: i
                         for (i, k)
@@ -278,9 +283,9 @@ class TestUtils(unittest.TestCase):
         """Test `parse` on `dict[str, tuple[int, ...]]`."""
 
         self.assertEqual(
-            fqr.core.codecs.enm.ParseErrorRef.invalid_map_decode,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.SimpleDict),
+            codecs.enm.ParseErrorRef.invalid_map_decode,
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.SimpleDict),
                 dict[str]
                 )
             )
@@ -289,9 +294,9 @@ class TestUtils(unittest.TestCase):
         """Test `parse` on `dict[str, tuple[int, ...]]`."""
 
         self.assertEqual(
-            fqr.core.codecs.enm.ParseErrorRef.value_decode,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.SimpleTuple),
+            codecs.enm.ParseErrorRef.value_decode,
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.SimpleTuple),
                 dict[str, tuple[int, ...]]
                 )
             )
@@ -301,8 +306,8 @@ class TestUtils(unittest.TestCase):
 
         self.assertEqual(
             Constants.BoolTuple,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.BoolTuple),
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.BoolTuple),
                 tuple[fqr.core.typ.AnyType, ...]
                 )
             )
@@ -312,8 +317,84 @@ class TestUtils(unittest.TestCase):
 
         self.assertEqual(
             Constants.BoolTuple,
-            fqr.core.codecs.utl.parse(
-                fqr.core.codecs.lib.json.dumps(Constants.BoolTuple),
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.BoolTuple),
                 tuple[Constants.AnotherConstrainedType, ...]
                 )
+            )
+
+    def test_30_datetime_parse(self):
+        """Test `parse` on `datetime.datetime`."""
+
+        self.assertEqual(
+            Constants.DateTime,
+            codecs.utl.parse(
+                Constants.DateTime.isoformat(),
+                lib.datetime.datetime
+                )
+            )
+
+    def test_31_date_parse(self):
+        """Test `parse` on `datetime.date`."""
+
+        self.assertEqual(
+            Constants.Date,
+            codecs.utl.parse(
+                Constants.Date.isoformat(),
+                lib.datetime.date
+                )
+            )
+
+    def test_32_anti_datetime_parse(self):
+        """Test `parse` on `datetime.datetime`."""
+
+        self.assertEqual(
+            codecs.enm.ParseErrorRef.datetime_decode,
+            codecs.utl.parse('123', lib.datetime.datetime)
+            )
+
+    def test_33_parse_literal(self):
+        """Test `parse` on `tuple[Literal[1], Literal[2], Literal[3]]`."""
+
+        self.assertEqual(
+            Constants.SimpleTuple,
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.SimpleTuple),
+                tuple[
+                    lib.t.Literal[1],
+                    lib.t.Literal[2],
+                    lib.t.Literal[3]
+                    ]
+                )
+            )
+
+    def test_34_anti_parse_literal(self):
+        """Test `parse` on `tuple[Literal[1], Literal[2], Literal[3]]`."""
+
+        self.assertEqual(
+            codecs.enm.ParseErrorRef.invalid_arr_decode,
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.SimpleTuple),
+                tuple[
+                    lib.t.Literal[3],
+                    lib.t.Literal[2],
+                    lib.t.Literal[1]
+                    ]
+                )
+            )
+
+    def test_35_parse_another_literal(self):
+        """Test `parse` on `Literal[1]`."""
+
+        self.assertEqual(
+            1,
+            codecs.utl.parse('1', lib.t.Literal[1])
+            )
+
+    def test_36_anti_parse_another_literal(self):
+        """Test `parse` on `Literal[1]`."""
+
+        self.assertEqual(
+            codecs.enm.ParseErrorRef.literal_decode,
+            codecs.utl.parse('2', lib.t.Literal[1])
             )
