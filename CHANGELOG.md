@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## v0.3.0 (2024-07-15)
+
+### Feature
+
+* feat: __dates_and_literals__ (#16)
+
+* feat: __dates_and_literals__
+
+Support dates, datetimes, and literals.
+
+closes #9
+
+* docs: __v0.3.0-rc.1__
+
+---------
+
+Co-authored-by: github-actions &lt;action@github.com&gt; ([`616eb21`](https://github.com/dan1hc/fqr/commit/616eb21c382a8761e7a0a9a1ad278d41be26b7fd))
+
 ## v0.2.0 (2024-07-15)
 
 ### Ci
