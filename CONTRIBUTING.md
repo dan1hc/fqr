@@ -60,7 +60,8 @@ Additionally, commit messages must adhere to [angular commit guidelines](https:/
 
 #### Special Rules
 
-* `<subject>` must be a pythonic `__dunder__`.
+* `<subject>` as a pythonic `__dunder__` can be cool.
+* `<subject>` must be appropriately descriptive of the change.
 * If the multi-line template is used, at least one issue ref must be correctly [keyworded](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/using-keywords-in-issues-and-pull-requests) in the footer.
 
 
@@ -72,7 +73,7 @@ Additionally, commit messages must adhere to [angular commit guidelines](https:/
 import re
 
 pattern = re.compile(
-    r'^([mM]erge .*)$|(^((build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)!?: \_\_(.+)\_\_)((\n\n(.+)\n\n)((BREAKING CHANGE|DEPRECATED)(: )(.+)\n\n(.+)\n\n\n)?(resolve[ds]? \#[A-Z0-9\-]+|fix(ed|es)? \#[A-Z0-9\-]+|close[ds]? \#[A-Z0-9\-]+)((, )(resolve[ds]? \#[A-Z0-9\-]+|fix(ed|es)? \#[A-Z0-9\-]+|close[ds]? \#[A-Z0-9\-]+))?)?$)|(^revert: ((build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)!?: \_\_(.+)\_\_)(\n\n(This reverts commit [a-z0-9]{40}\..*)\n\n)(fix(ed|es)? \#[A-Z0-9\-]+)((, )(fix(ed|es)? \#[A-Z0-9\-]+))?$)'
+    r'^([mM]erge .*)$|(^((build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)!?: .+)((\n\n(.+)\n\n)((BREAKING CHANGE|DEPRECATED)(: )(.+)\n\n(.+)\n\n\n)?(resolve[ds]? \#[A-Z0-9\-]+|fix(ed|es)? \#[A-Z0-9\-]+|close[ds]? \#[A-Z0-9\-]+)((, )(resolve[ds]? \#[A-Z0-9\-]+|fix(ed|es)? \#[A-Z0-9\-]+|close[ds]? \#[A-Z0-9\-]+))?)?$)|(^revert: ((build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)!?: .+)(\n\n(This reverts commit [a-z0-9]{40}\..*)\n\n)(fix(ed|es)? \#[A-Z0-9\-]+)((, )(fix(ed|es)? \#[A-Z0-9\-]+))?$)'
     )
 
 assert bool(pattern.match('feat: __valid_example__\n\noptional body text\n\ncloses #1, resolve #2')) is True
