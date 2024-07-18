@@ -1,10 +1,12 @@
 """Type hinting utility functions."""
 
 __all__ = (
+    'collect_annotations',
     'resolve_type',
     )
 
 from .. import lib
+from .. import obj
 from .. import typ
 
 from . import check
@@ -129,3 +131,23 @@ def resolve_type(
             return typ_or_ref
     else:
         return typ_ref_or_str
+
+
+def collect_annotations(
+    typed_obj: obj.SupportsAnnotations | type[obj.SupportsAnnotations]
+    ) -> dict[str, type[lib.t.Any] | lib.t.Any]:
+    """
+    Get all type annotations for `typed_obj`.
+
+    ---
+
+    Walks `__bases__` to collect all annotations.
+
+    """
+
+    annotations: dict[str, type[lib.t.Any] | lib.t.Any] = {}
+    for __base in reversed(typed_obj.__bases__):
+        annotations.update(getattr(__base, '__annotations__', {}))
+    annotations.update(typed_obj.__annotations__)
+
+    return annotations
