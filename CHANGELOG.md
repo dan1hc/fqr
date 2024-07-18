@@ -1,5 +1,31 @@
 # CHANGELOG
 
+## v0.4.0 (2024-07-18)
+
+### Ci
+
+* ci: __allow_non_dunder_commits__ (#18)
+
+Allows for non-dunder subject lines in commit messages.
+
+closes #10 ([`79dd660`](https://github.com/dan1hc/fqr/commit/79dd6604db9c242d5c1a8954d7f83d8b3dad6ebf))
+
+### Feature
+
+* feat: __typed_objs__ (#19)
+
+* feat: __typed_objs__
+
+Implement codec for `TypedDict`, `dataclasses`, `pydantic.BaseModel`, etc. Also adds functionality for handling [read: ignoring] wrapper types (`Annotated | ClassVar | Final | InitVar`).
+
+closes #11, closes #12
+
+* docs: __v0.4.0-rc.1__
+
+---------
+
+Co-authored-by: github-actions &lt;action@github.com&gt; ([`124da16`](https://github.com/dan1hc/fqr/commit/124da1632705a4ad1b2c6362b9a0fc1204729ff8))
+
 ## v0.3.0 (2024-07-15)
 
 ### Feature
