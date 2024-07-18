@@ -3,6 +3,7 @@
 from .. import lib
 
 __all__ = (
+    'collections',
     'decimal',
     'ipaddress',
     'json',
@@ -12,6 +13,7 @@ __all__ = (
     *lib.__all__
     )
 
+import collections.abc
 import decimal
 import ipaddress
 import json

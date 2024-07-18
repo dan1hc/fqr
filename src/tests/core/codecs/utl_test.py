@@ -10,6 +10,13 @@ from fqr . core import lib
 from . import cns
 
 
+class SimpleTypedObj(lib.t.TypedDict):
+    """Simple `SupportsAnnotation` object."""
+
+    name: str
+    id_: int
+
+
 class Constants(cns.Constants):
     """Constant values specific to unit tests in this file."""
 
@@ -32,6 +39,7 @@ class Constants(cns.Constants):
     NestedDict = {'nesting': SimpleDict}
     DateTime = lib.datetime.datetime.now(lib.datetime.timezone.utc)
     Date = DateTime.date()
+    SimpleObj = SimpleTypedObj(name='test', id_=1)
 
 
 class TestUtils(unittest.TestCase):
@@ -397,4 +405,37 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(
             codecs.enm.ParseErrorRef.literal_decode,
             codecs.utl.parse('2', lib.t.Literal[1])
+            )
+
+    def test_37_parse_typed_obj(self):
+        """Test `parse` on `TypedDict`."""
+
+        self.assertEqual(
+            Constants.SimpleObj,
+            codecs.utl.parse(
+                codecs.lib.json.dumps(Constants.SimpleObj),
+                SimpleTypedObj
+                )
+            )
+
+    def test_38_anti_parse_typed_obj(self):
+        """Test `parse` on `TypedDict`."""
+
+        self.assertEqual(
+            codecs.enm.ParseErrorRef.invalid_map_decode,
+            codecs.utl.parse(
+                codecs.lib.json.dumps(SimpleTypedObj(name=1, id_='test')),
+                SimpleTypedObj
+                )
+            )
+
+    def test_39_anti_parse_typed_obj(self):
+        """Test `parse` on `TypedDict`."""
+
+        self.assertEqual(
+            codecs.enm.ParseErrorRef.invalid_keys_decode,
+            codecs.utl.parse(
+                codecs.lib.json.dumps(SimpleTypedObj(not_a_key='test')),
+                SimpleTypedObj
+                )
             )

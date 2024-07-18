@@ -119,6 +119,11 @@ def parse(
 @lib.t.overload
 def parse(
     value: lib.t.Any,
+    tp: type[typings.typ.Typed],
+    ) -> typings.typ.Typed | enm.ParseErrorRef: ...
+@lib.t.overload
+def parse(
+    value: lib.t.Any,
     tp: type[typ.AnyType],
     ) -> typ.AnyType | enm.ParseErrorRef: ...
 def parse(
@@ -127,12 +132,14 @@ def parse(
         type[typings.typ.VariadicArrayType]
         | type[typings.typ.ArrayType]
         | type[typings.typ.MappingType]
+        | type[typings.typ.Typed]
         | type[typ.AnyType]
         ),
     ) -> (
         typings.typ.VariadicArrayType
         | typings.typ.ArrayType
         | typings.typ.MappingType
+        | typings.typ.Typed
         | typ.AnyType
         | enm.ParseErrorRef
         ):
@@ -176,6 +183,24 @@ def parse(
             else:
                 return deserialized_as_dict
         else:
+            return try_decode(value, tp)
+    elif typings.utl.check.is_typed(tp):
+        tp_annotations = typings.utl.hint.collect_annotations(tp)
+        if typings.utl.check.is_serialized_mapping(value):
+            tp_dict: dict[str, lib.t.Any] = {}
+            for k, val in value.items():
+                if (
+                    isinstance(k, str)
+                    and (ckey := strings.utl.cname_for(k, tp_annotations))
+                    ):
+                    tp_val = parse(val, tp_annotations[ckey])
+                    if isinstance(tp_val, enm.ParseErrorRef):
+                        return enm.ParseErrorRef.invalid_map_decode
+                    tp_dict[ckey] = tp_val
+                else:
+                    return enm.ParseErrorRef.invalid_keys_decode
+            return tp(**tp_dict)
+        else:  # pragma: no cover
             return try_decode(value, tp)
     elif (generics := typings.utl.check.get_type_args(tp)):
         if (typings.utl.check.is_variadic_array_type(tp)):

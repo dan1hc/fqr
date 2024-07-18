@@ -17,9 +17,11 @@ __all__ = (
     'is_params_type',
     'is_primitive',
     'is_serialized_mapping',
+    'is_typed',
     'is_typevar',
     'is_union',
     'is_variadic_array_type',
+    'is_wrapper_type',
     )
 
 from .. import lib
@@ -98,6 +100,9 @@ def get_checkable_types(
 
     `Literals` will be returned as their values.
 
+    `Annotated`, `ClassVar`, `Final`, and `InitVar` are expanded as \
+    their parameter arguments.
+
     """
 
     checkable_types = {
@@ -132,9 +137,12 @@ def expand_types(
 
     `Literals` will be returned as their values.
 
+    `Annotated`, `ClassVar`, `Final`, and `InitVar` are expanded as \
+    their parameter arguments.
+
     """
 
-    if is_union(any_tp):
+    if is_union(any_tp) or is_wrapper_type(any_tp):
         return tuple(
             tp
             for tp
@@ -270,10 +278,7 @@ def is_literal(
 
     otp = lib.t.get_origin(tp) or tp
 
-    return (
-        getattr(otp, '__name__', '') == 'Literal'
-        and getattr(otp, '__module__', '') == 'typing'
-        )
+    return getattr(otp, '__name__', '') == 'Literal'
 
 
 def is_date_type(
@@ -385,6 +390,27 @@ def is_array(
         isinstance(obj, lib.t.Collection)
         and not isinstance(obj, (str, lib.t.Mapping))
         )
+
+
+def is_wrapper_type(
+    tp: typ.Wrapper | type[lib.t.Any] | lib.t.Any
+    ) -> lib.t.TypeGuard[typ.Wrapper]:
+    """Return `True` if `tp` is `Annotated | ClassVar | Final | InitVar`."""
+
+    otp = (lib.t.get_origin(tp) or tp) if isinstance(tp, type) else type(tp)
+
+    return (
+        getattr(otp, '__name__')
+        in {'Annotated', 'ClassVar', 'Final', 'InitVar'}
+        )
+
+
+def is_typed(
+    any: type[typ.Typed] | type[lib.t.Any] | lib.t.Any
+    ) -> lib.t.TypeGuard[type[typ.Typed]]:
+    """Return `True` if `any` is type-hinted."""
+
+    return getattr(any, '__annotations__', False) is not False
 
 
 def is_array_type(
