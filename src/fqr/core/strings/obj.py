@@ -9,11 +9,11 @@ __all__ = (
     'StringWrapper',
     )
 
-from . import cns
+from . import cfg
 from . import lib
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constants specific to this file."""
 
 

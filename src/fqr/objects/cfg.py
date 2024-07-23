@@ -7,7 +7,7 @@ __all__ = (
 from .. import core
 
 
-class Constants(core.cns.Constants):
+class Constants(core.cfg.Constants):
     """Constant values specific to objects modules."""
 
     BASE_ATTRS = (
@@ -37,8 +37,8 @@ class Constants(core.cns.Constants):
         'read_only',
         'write_only',
         )
-    FIELDS_MODULE = __name__.replace('cns', 'fields.obj')
-    OBJECTS_MODULE = __name__.replace('cns', 'objs.obj')
+    FIELDS_MODULE = __name__.replace('cfg', 'fields.obj')
+    OBJECTS_MODULE = __name__.replace('cfg', 'objs.obj')
     FORBIDDEN_KEYWORDS = (
         '__init__',
         '__init_subclass__',

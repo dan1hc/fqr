@@ -4,8 +4,10 @@ __all__ = (
     'Constants',
     )
 
-from .. import cns
+from .. import cfg
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to unit tests in this module."""
+
+    INVALID_STRING_CASING_EXAMPLE = 'WRONG_cASasdfING9000man'

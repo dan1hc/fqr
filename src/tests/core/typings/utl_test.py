@@ -6,7 +6,7 @@ import fqr
 
 from ... import mocking
 
-from . import cns
+from . import cfg
 
 
 class SimpleTypedObj(fqr.core.lib.t.TypedDict):
@@ -23,7 +23,7 @@ class InitVarClass(fqr.Object):
     init_var_as_str: 'fqr.Field[fqr.core.lib.dataclasses.InitVar]'
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to unit tests in this file."""
 
 

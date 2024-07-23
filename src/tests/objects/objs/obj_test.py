@@ -8,10 +8,10 @@ from fqr . core import lib
 
 from ... import mocking
 
-from . import cns
+from . import cfg
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to unit tests in this file."""
 
 

@@ -6,14 +6,14 @@ __all__ = (
 
 from .. import cli
 
-from . import cns
+from . import cfg
 from . import enm
 from . import lib
 from . import obj
 from . import static
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Documentation utils specific constants."""
 
 

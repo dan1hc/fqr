@@ -19,7 +19,7 @@ __all__ = (
 from .. import codecs
 from .. import typings
 
-from . import cns
+from . import cfg
 from . import enm
 from . import exc
 from . import lib
@@ -27,7 +27,7 @@ from . import obj
 from . import typ
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constants specific to this file."""
 
     CACHED_CNAMES: dict[tuple[typ.AnyString, tuple[typ.AnyString, ...]], typ.AnyString] = {}

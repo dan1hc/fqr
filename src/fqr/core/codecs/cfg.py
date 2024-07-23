@@ -4,7 +4,7 @@ __all__ = (
     'Constants',
     )
 
-from .. import cns
+from .. import cfg
 
 from . import lib
 from . import typ
@@ -16,7 +16,7 @@ def _isoformat_encoder(
     return o.isoformat()
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values shared across core codecs modules."""
 
     ENCODERS: dict[

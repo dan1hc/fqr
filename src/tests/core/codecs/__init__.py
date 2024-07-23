@@ -1,7 +1,7 @@
 """Typings module unit tests."""
 
 __all__ = (
-    'cns',
+    'cfg',
     )
 
-from . import cns
+from . import cfg

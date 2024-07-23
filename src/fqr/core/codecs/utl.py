@@ -11,13 +11,13 @@ __all__ = (
 from .. import strings
 from .. import typings
 
-from . import cns
+from . import cfg
 from . import enm
 from . import lib
 from . import typ
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to this file."""
 
 

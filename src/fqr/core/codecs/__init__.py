@@ -1,14 +1,14 @@
 """Core codec modules."""
 
 __all__ = (
-    'cns',
+    'cfg',
     'enm',
     'lib',
     'typ',
     'utl',
     )
 
-from . import cns
+from . import cfg
 from . import enm
 from . import lib
 from . import typ

@@ -19,7 +19,7 @@ import fqr
 """
 
 __all__ = (
-    'cns',
+    'cfg',
     'codecs',
     'enm',
     'exc',
@@ -29,7 +29,7 @@ __all__ = (
     'typings',
     )
 
-from . import cns
+from . import cfg
 from . import codecs
 from . import enm
 from . import exc

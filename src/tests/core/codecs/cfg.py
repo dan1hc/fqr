@@ -4,8 +4,8 @@ __all__ = (
     'Constants',
     )
 
-from fqr import core
+from .. import cfg
 
 
-class Constants(core.cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to unit tests in this module."""

@@ -16,7 +16,7 @@ __all__ = (
     'SimilarQueryCondition',
     )
 
-from .. import cns
+from .. import cfg
 from .. import enm
 from .. import fields
 from .. import lib
@@ -24,7 +24,7 @@ from .. import objs
 from .. import typ
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to this file."""
 
 

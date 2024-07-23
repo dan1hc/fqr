@@ -7,7 +7,7 @@ __all__ = (
 
 from .. import cli
 
-from . import cns
+from . import cfg
 from . import enm
 from . import lib
 from . import utl
@@ -18,7 +18,7 @@ __all__ = (
     )
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to Docs objs."""
 
 

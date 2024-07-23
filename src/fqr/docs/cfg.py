@@ -9,7 +9,7 @@ from .. import core
 from . import lib
 
 
-class Constants(core.cns.Constants):
+class Constants(core.cfg.Constants):
     """Constant values specific to docs modules."""
 
     BASE_VERSION    = '0.0.0'

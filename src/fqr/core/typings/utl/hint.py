@@ -5,7 +5,7 @@ __all__ = (
     'resolve_type',
     )
 
-from .. import cns
+from .. import cfg
 from .. import lib
 from .. import obj
 from .. import typ
@@ -13,7 +13,7 @@ from .. import typ
 from . import check
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to this file."""
 
     CACHED_ANNOTATIONS: dict[str, typ.AnyDict] = {}

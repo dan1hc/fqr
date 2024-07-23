@@ -4,12 +4,12 @@ __all__ = (
     'Constants',
     )
 
-from .. import cns
+from .. import cfg
 
 from . import lib
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values shared across core strings modules."""
 
     MAX_CHARS = int(lib.os.getenv('MAX_CHARS', 384))

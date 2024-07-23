@@ -9,12 +9,12 @@ __all__ = (
 
 from .. import core
 
-from . import cns
+from . import cfg
 from . import lib
 from . import typ
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to this file."""
 
     CACHED_HASH_FIELDS: dict[str, tuple[typ.string[typ.snake_case], ...]] = {}

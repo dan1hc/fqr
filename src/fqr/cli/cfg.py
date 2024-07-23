@@ -7,5 +7,5 @@ __all__ = (
 from .. import core
 
 
-class Constants(core.cns.Constants):
+class Constants(core.cfg.Constants):
     """Constant values specific to CLI modules."""

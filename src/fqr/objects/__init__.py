@@ -18,7 +18,7 @@ import fqr
 
 """
 
-from . import cns
+from . import cfg
 from . import enm
 from . import exc
 from . import fields
@@ -30,7 +30,7 @@ from . import typ
 from . import utl
 
 __all__ = (
-    'cns',
+    'cfg',
     'enm',
     'exc',
     'fields',

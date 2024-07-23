@@ -7,7 +7,7 @@ import fqr
 from fqr . core import codecs
 from fqr . core import lib
 
-from . import cns
+from . import cfg
 
 
 class SimpleTypedObj(lib.t.TypedDict):
@@ -25,7 +25,7 @@ class UnknownSerializable:
     """Class for testing with no known serialization."""
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to unit tests in this file."""
 
     SimpleDict: dict[str, tuple[int, ...]] = {

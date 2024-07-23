@@ -4,10 +4,10 @@ import unittest
 
 import fqr
 
-from . import cns
+from . import cfg
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to unit tests in this file."""
 
     VALID_CAMEL_STRING_EXAMPLES = (

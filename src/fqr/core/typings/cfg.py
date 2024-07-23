@@ -4,8 +4,8 @@ __all__ = (
     'Constants',
     )
 
-from .. import cns
+from .. import cfg
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values shared across core typings modules."""

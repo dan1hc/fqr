@@ -1,14 +1,14 @@
 """Core typing modules."""
 
 __all__ = (
-    'cns',
+    'cfg',
     'lib',
     'obj',
     'typ',
     'utl',
     )
 
-from . import cns
+from . import cfg
 from . import lib
 from . import obj
 from . import typ

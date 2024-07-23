@@ -28,13 +28,13 @@ __all__ = (
     'is_wrapper_type',
     )
 
-from .. import cns
+from .. import cfg
 from .. import lib
 from .. import obj
 from .. import typ
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to this file."""
 
 

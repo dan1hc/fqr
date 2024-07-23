@@ -14,11 +14,11 @@ __all__ = (
 
 from .. import typ
 
-from . import cns
+from . import cfg
 from . import lib
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to this file."""
 
 

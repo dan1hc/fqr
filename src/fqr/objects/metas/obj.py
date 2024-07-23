@@ -6,7 +6,7 @@ __all__ = (
 
 from ... import core
 
-from .. import cns
+from .. import cfg
 from .. import exc
 from .. import lib
 from .. import typ
@@ -17,7 +17,7 @@ if lib.t.TYPE_CHECKING:  # pragma: no cover
     from .. import fields as fields_
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to this file."""
 
 
