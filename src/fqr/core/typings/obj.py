@@ -23,12 +23,13 @@ class Constants(cns.Constants):
 
 
 FieldPattern = lib.re.compile(
-    r'(fqr(\.[a-zA-Z]+)*\.)?Field\[((\[)?[\.\|\,a-zA-Z0-9_ ]+(\])?)+\]'
+    r'(fqr(\.[a-zA-Z]{1,32}){0,32}\.)?Field'
+    r'\[((\[)?[\.\|\,a-zA-Z0-9_ ]{1,64}(\])?){1,64}\]'
     )
 
 WrapperPattern = lib.re.compile(
-    r'([a-zA-Z]+\.?)?(Annotated|ClassVar|Final|InitVar)'
-    r'\[((\[)?[\.\|\,a-zA-Z0-9_ ]+(\])?)+\]'
+    r'([a-zA-Z]{1,64}\.?)?(Annotated|ClassVar|Final|InitVar)'
+    r'\[((\[)?[\.\|\,a-zA-Z0-9_ ]{1,64}(\])?){1,64}\]'
     )
 
 
