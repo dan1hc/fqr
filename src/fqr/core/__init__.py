@@ -13,6 +13,7 @@ Usage
 
 ```py
 import fqr
+
 ```
 
 """

@@ -4,7 +4,23 @@ import unittest
 
 import fqr
 
+from ... import mocking
+
 from . import cns
+
+
+class SimpleTypedObj(fqr.core.lib.t.TypedDict):
+    """Simple `SupportsAnnotation` object."""
+
+    name: str
+    id_: int
+
+
+class InitVarClass(fqr.Object):
+    """Has an InitVar for testing."""
+
+    init_var: fqr.Field[fqr.core.lib.dataclasses.InitVar]
+    init_var_as_str: 'fqr.Field[fqr.core.lib.dataclasses.InitVar]'
 
 
 class Constants(cns.Constants):
@@ -95,6 +111,37 @@ class TestUtils(unittest.TestCase):
         """Test `is_date_type`."""
 
         self.assertFalse(fqr.core.typings.utl.check.is_date_type(None))
+
+    def test_13_annotations_cache(self):
+        """Test `collect_annotations`."""
+
+        self.assertEqual(
+            SimpleTypedObj.__annotations__,
+            fqr.core.typings.utl.hint.collect_annotations(SimpleTypedObj)
+            )
+
+    def test_14_is_object(self):
+        """Test `is_object`."""
+
+        self.assertTrue(
+            fqr.core.typings.utl.check.is_object(mocking.Derivative)
+            )
+
+    def test_15_is_field_type_forward_str(self):
+        """Test `is_field_type` works with `str` ForwardRef."""
+
+        self.assertTrue(
+            fqr.core.typings.utl.check.is_field_type('Field[Any]')
+            )
+
+    def test_16_is_immutable_type(self):
+        """Test `is_immutable_type`."""
+
+        self.assertTrue(
+            fqr.core.typings.utl.check.is_immutable_type(
+                tuple[str, ...]
+                )
+            )
 
 
 class Mockery(fqr.core.lib.t.Generic[fqr.core.typ.AnyType]):

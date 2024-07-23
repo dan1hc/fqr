@@ -1,7 +1,9 @@
 """Codecs utility functions."""
 
 __all__ = (
+    'encode',
     'parse',
+    'serialize',
     'try_decode',
     'try_parse_json',
     )
@@ -9,9 +11,41 @@ __all__ = (
 from .. import strings
 from .. import typings
 
+from . import cns
 from . import enm
 from . import lib
 from . import typ
+
+
+class Constants(cns.Constants):
+    """Constant values specific to this file."""
+
+
+def serialize(value: lib.t.Any) -> str:
+    """Convert value to string."""
+
+    return lib.json.dumps(
+        value,
+        indent=Constants.INDENT,
+        sort_keys=True,
+        default=strings.utl.convert_for_repr
+        )
+
+
+def encode(value: lib.t.Any) -> typ.Serial:
+    """
+    JSON encode `value` using a corresponding encoder, otherwise returns \
+    `repr(value)`."""
+
+    if (encoder := Constants.ENCODERS.get(value.__class__)) is not None:
+        return encoder(value)
+
+    for _base in reversed(value.__class__.__bases__):
+        for __base in reversed(_base.__mro__):
+            if (encoder := Constants.ENCODERS.get(__base)) is not None:
+                return encoder(value)
+
+    return repr(value)
 
 
 def try_decode(
@@ -191,7 +225,12 @@ def parse(
             for k, val in value.items():
                 if (
                     isinstance(k, str)
-                    and (ckey := strings.utl.cname_for(k, tp_annotations))
+                    and (
+                        ckey := strings.utl.cname_for(
+                            k,
+                            tuple(tp_annotations)
+                            )
+                        )
                     ):
                     tp_val = parse(val, tp_annotations[ckey])
                     if isinstance(tp_val, enm.ParseErrorRef):

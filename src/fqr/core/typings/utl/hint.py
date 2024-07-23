@@ -5,11 +5,19 @@ __all__ = (
     'resolve_type',
     )
 
+from .. import cns
 from .. import lib
 from .. import obj
 from .. import typ
 
 from . import check
+
+
+class Constants(cns.Constants):
+    """Constant values specific to this file."""
+
+    CACHED_ANNOTATIONS: dict[str, typ.AnyDict] = {}
+    """Local cache for typed object annotations."""
 
 
 eval_type: lib.t.Callable[
@@ -133,9 +141,31 @@ def resolve_type(
         return typ_ref_or_str
 
 
+def _collect_annotations(
+    __name: str,
+    __annotations: typ.AnyDict,
+    __bases: tuple[type, ...]
+    ) -> typ.AnyDict:
+    annotations: typ.AnyDict = {}
+    for _base in reversed(__bases):
+        for __base in reversed(_base.__mro__):
+            annotations |= getattr(__base, '__annotations__', {})
+    annotations |= __annotations
+    # Ensure any annotations hinted for TYPE_CHECKING removed.
+    annotations.pop(Constants.__ANNOTATIONS__, None)
+    annotations.pop(Constants.__DATACLASS_FIELDS__, None)
+    annotations.pop(Constants.__DICT__, None)
+    annotations.pop(Constants.__HERITAGE__, None)
+    annotations.pop(Constants.FIELDS, None)
+    annotations.pop(Constants.ENUMERATIONS, None)
+    annotations.pop(Constants.HASH_FIELDS, None)
+    Constants.CACHED_ANNOTATIONS[__name] = annotations
+    return annotations
+
+
 def collect_annotations(
     typed_obj: obj.SupportsAnnotations | type[obj.SupportsAnnotations]
-    ) -> dict[str, type[lib.t.Any] | lib.t.Any]:
+    ) -> typ.AnyDict:
     """
     Get all type annotations for `typed_obj`.
 
@@ -145,9 +175,13 @@ def collect_annotations(
 
     """
 
-    annotations: dict[str, type[lib.t.Any] | lib.t.Any] = {}
-    for __base in reversed(typed_obj.__bases__):
-        annotations.update(getattr(__base, '__annotations__', {}))
-    annotations.update(typed_obj.__annotations__)
+    obj_tp = typed_obj if isinstance(typed_obj, type) else type(typed_obj)
 
-    return annotations
+    if obj_tp.__name__ in Constants.CACHED_ANNOTATIONS:
+        return Constants.CACHED_ANNOTATIONS[obj_tp.__name__]
+
+    return _collect_annotations(
+        obj_tp.__name__,
+        getattr(obj_tp, '__annotations__', {}),
+        obj_tp.__bases__
+        )

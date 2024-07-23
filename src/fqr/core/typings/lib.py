@@ -3,14 +3,12 @@
 from .. import lib
 
 __all__ = (
-    'abc',
-    'dataclasses',
+    'fractions',
     'numbers',
     *lib.__all__
     )
 
-import abc
-import dataclasses
+import fractions
 import numbers
 
 from .. lib import *

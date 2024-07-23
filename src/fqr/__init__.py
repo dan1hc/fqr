@@ -37,6 +37,9 @@ __all__ = (
     'cli',
     'core',
     'docs',
+    'objects',
+    'Field',
+    'Object'
     )
 
 __version__ = '0.4.0'
@@ -44,3 +47,6 @@ __version__ = '0.4.0'
 from . import cli
 from . import core
 from . import docs
+from . import objects
+
+from . objects import Field, Object

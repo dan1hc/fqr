@@ -2,10 +2,13 @@
 
 __all__ = (
     'argparse',
+    'dataclasses',
     'datetime',
+    'decimal',
     'enum',
     'functools',
     'itertools',
+    'json',
     'os',
     're',
     'sys',
@@ -19,10 +22,13 @@ __all__ = (
     )
 
 import argparse
+import dataclasses
 import datetime
+import decimal
 import enum
 import functools
 import itertools
+import json
 import os
 import re
 import sys

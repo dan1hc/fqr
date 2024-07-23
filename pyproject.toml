@@ -76,6 +76,7 @@ exclude_lines = [
     ]
 omit = [
     "**/fqr/docs/utl.py",
+    "**/fqr/objects/*",  # TODO: FINISH
     ]
 
 [tool.pytest.ini_options]

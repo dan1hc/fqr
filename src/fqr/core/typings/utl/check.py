@@ -9,11 +9,15 @@ __all__ = (
     'is_bool_type',
     'is_date_type',
     'is_datetime_type',
+    'is_field',
+    'is_field_type',
+    'is_immutable_type',
     'is_literal',
     'is_mapping',
     'is_mapping_type',
     'is_none_type',
     'is_number_type',
+    'is_object',
     'is_params_type',
     'is_primitive',
     'is_serialized_mapping',
@@ -24,9 +28,14 @@ __all__ = (
     'is_wrapper_type',
     )
 
+from .. import cns
 from .. import lib
 from .. import obj
 from .. import typ
+
+
+class Constants(cns.Constants):
+    """Constant values specific to this file."""
 
 
 def get_args(tp: lib.t.Any) -> tuple[lib.t.Any, ...]:
@@ -37,21 +46,13 @@ def get_args(tp: lib.t.Any) -> tuple[lib.t.Any, ...]:
 
 @lib.t.overload
 def get_type_args(
-    tp: obj.SupportsParams[lib.Unpack[typ.ArgsType]]
+    tp: 'obj.SupportsParams[lib.Unpack[typ.ArgsType]]'
     ) -> tuple[lib.Unpack[typ.ArgsType]]: ...
 @lib.t.overload
+def get_type_args(tp: lib.t.Any) -> tuple[lib.t.Any, ...]: ...
 def get_type_args(
-    tp: type[lib.t.Any]
-    ) -> tuple[lib.t.Any, ...]: ...
-def get_type_args(
-    tp: (
-        obj.SupportsParams[lib.Unpack[typ.ArgsType]]
-        | type[lib.t.Any]
-        )
-    ) -> (
-        tuple[lib.Unpack[typ.ArgsType]]
-        | tuple[lib.t.Any, ...]
-        ):
+    tp: 'obj.SupportsParams[lib.Unpack[typ.ArgsType]] | lib.t.Any'
+    ) -> tuple[lib.Unpack[typ.ArgsType]] | tuple[lib.t.Any, ...]:
     """
     Get generic arguments for `type[Any]`.
 
@@ -179,21 +180,23 @@ def expand_types(
 
 @lib.t.overload
 def is_params_type(
-    tp: obj.SupportsParams[lib.Unpack[typ.ArgsType]],
+    tp: 'obj.SupportsParams[lib.Unpack[typ.ArgsType]]',
     ) -> lib.t.TypeGuard[
-        obj.SupportsParams[lib.Unpack[typ.ArgsType]]
+        'obj.SupportsParams[lib.Unpack[typ.ArgsType]]'
         ]: ...
 @lib.t.overload
 def is_params_type(
     tp: lib.t.Any
     ) -> lib.t.TypeGuard[
-        obj.SupportsParams[lib.Unpack[tuple[lib.t.Any, ...]]]
+        'obj.SupportsParams[lib.Unpack[tuple[lib.t.Any, ...]]]'
         ]: ...
 def is_params_type(
-    tp: obj.SupportsParams[lib.Unpack[typ.ArgsType]] | lib.t.Any
+    tp: 'obj.SupportsParams[lib.Unpack[typ.ArgsType]] | lib.t.Any'
     ) -> lib.t.TypeGuard[
-        obj.SupportsParams[lib.Unpack[typ.ArgsType]]
-        | obj.SupportsParams[lib.Unpack[tuple[lib.t.Any, ...]]]
+        lib.t.Union[
+            'obj.SupportsParams[lib.Unpack[typ.ArgsType]]',
+            'obj.SupportsParams[lib.Unpack[tuple[lib.t.Any, ...]]]'
+            ]
         ]:
     """Return `True` if `tp` has type args."""
 
@@ -392,15 +395,69 @@ def is_array(
         )
 
 
+def is_object(
+    obj_: 'obj.ObjectLike | type[lib.t.Any] | lib.t.Any'
+    ) -> lib.t.TypeGuard['obj.ObjectLike']:
+    """Return `True` if `obj_` is an `Object`."""
+
+    if isinstance(obj_, type):
+        otp = lib.t.get_origin(obj_) or obj_
+    else:
+        otp = type(obj_)
+
+    from .... import objects
+
+    return issubclass(otp, objects.Object)
+
+
+def is_field(
+    obj_: 'typ.AnyField[typ.AnyType] | lib.t.Any'
+    ) -> lib.t.TypeGuard[
+        'typ.AnyField[typ.AnyType] | typ.AnyField[lib.t.Any]'
+        ]:
+    """Return `True` if `obj_` typ AnyField[Any]`."""
+
+    obj_tp = obj_ if isinstance(obj_, type) else type(obj_)
+
+    return is_field_type(obj_tp)
+
+
+def is_field_type(
+    tp: 'type[typ.AnyField[typ.AnyType]] | lib.t.Any'
+    ) -> lib.t.TypeGuard[
+        type['typ.AnyField[typ.AnyType]'] | type['typ.AnyField[lib.t.Any]']
+        ]:
+    """Return `True` if `tp` is `typ[AnyField[Any]]`."""
+
+    if isinstance(tp, lib.t.ForwardRef):
+        return bool(obj.FieldPattern.match(tp.__forward_arg__))
+    elif isinstance(tp, str):
+        return bool(obj.FieldPattern.match(tp))
+
+    otp = lib.t.get_origin(tp) or tp
+
+    from .... import objects
+
+    return (
+        getattr(otp, '__name__', '') == 'Field'
+        and not issubclass(otp, objects.typ.Field)
+        )
+
+
 def is_wrapper_type(
     tp: typ.Wrapper | type[lib.t.Any] | lib.t.Any
     ) -> lib.t.TypeGuard[typ.Wrapper]:
     """Return `True` if `tp` is `Annotated | ClassVar | Final | InitVar`."""
 
-    otp = (lib.t.get_origin(tp) or tp) if isinstance(tp, type) else type(tp)
+    if isinstance(tp, lib.t.ForwardRef):
+        return bool(obj.WrapperPattern.match(tp.__forward_arg__))
+    elif isinstance(tp, str):  # pragma: no cover
+        return bool(obj.WrapperPattern.match(tp))
+
+    otp = lib.t.get_origin(tp) or tp
 
     return (
-        getattr(otp, '__name__')
+        getattr(otp, '__name__', '')
         in {'Annotated', 'ClassVar', 'Final', 'InitVar'}
         )
 
@@ -410,7 +467,17 @@ def is_typed(
     ) -> lib.t.TypeGuard[type[typ.Typed]]:
     """Return `True` if `any` is type-hinted."""
 
-    return getattr(any, '__annotations__', False) is not False
+    return (
+        getattr(any, '__annotations__', False) is not False
+        and not isinstance(any, lib.t.ForwardRef)
+        and not isinstance(
+            any,
+            (
+                lib.types.FunctionType,
+                lib.types.MethodType
+                )
+            )
+        )
 
 
 def is_array_type(
@@ -440,3 +507,28 @@ def is_variadic_array_type(
         return issubclass(otps[0], tuple)
     else:
         return False
+
+
+def is_immutable_type(
+    tp: type[lib.t.Any],
+    ) -> lib.t.TypeGuard[type['typ.Immutable']]:
+    """Return `True` if tp is an immutable standardlib type."""
+
+    for sub_tp in expand_types(tp):
+        if all(
+            issubclass(sub_otp, get_checkable_types(typ.Immutable))
+            for sub_otp
+            in get_checkable_types(sub_tp)
+            ):
+            if is_params_type(sub_tp):
+                if all(
+                    is_immutable_type(arg_tp)
+                    or is_ellipsis(arg_tp)
+                    for arg_tp
+                    in get_type_args(sub_tp)
+                    ):
+                    return True
+            else:
+                return True
+
+    return False
