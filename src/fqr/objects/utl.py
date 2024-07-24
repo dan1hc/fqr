@@ -7,8 +7,6 @@ __all__ = (
     'is_valid_keyword',
     )
 
-from .. import core
-
 from . import cfg
 from . import lib
 from . import typ
@@ -56,13 +54,13 @@ def get_enumerations_from_fields(
     for k, field in fields.items():
         if isinstance((enum_ := field.get('enum')), lib.enum.EnumMeta):
             d[k] = tuple([e.value for e in enum_._member_map_.values()])
-        elif core.typings.utl.check.is_array(enum_):
+        elif typ.utl.check.is_array(enum_):
             d[k] = tuple(enum_)
         if (
             k in d
             and isinstance(
                 None,
-                core.typings.utl.check.get_checkable_types(field)
+                typ.utl.check.get_checkable_types(field)
                 )
             and None not in d[k]
             ):
@@ -109,9 +107,9 @@ def get_fields_for_hash(
 
     for f, tp in __annotations.items():
         if not all(
-            core.typings.utl.check.is_primitive(sub_tp)
+            typ.utl.check.is_primitive(sub_tp)
             for sub_tp
-            in core.typings.utl.check.get_checkable_types(tp)
+            in typ.utl.check.get_checkable_types(tp)
             ):
             continue
         elif (s := f.strip('_').lower()).endswith('id'):

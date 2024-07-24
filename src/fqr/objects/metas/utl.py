@@ -52,7 +52,7 @@ def parse_new_annotations(
 
     for name, dtype in __annotations.items():
         if (
-            core.typings.utl.check.is_wrapper_type(dtype)
+            typ.utl.check.is_wrapper_type(dtype)
             or (name in __fields and name not in __base_fields)
             ):
             continue
@@ -61,7 +61,7 @@ def parse_new_annotations(
             and __module != Constants.FIELDS_MODULE
             ):
             raise exc.ReservedKeywordError(name)
-        elif not core.typings.utl.check.is_field_type(dtype):
+        elif not typ.utl.check.is_field_type(dtype):
             raise exc.FieldAnnotationError(name, dtype)
         elif not core.strings.utl.is_snake_case_string(name):
             raise exc.IncorrectCasingError(tuple(__annotations))
@@ -85,7 +85,7 @@ def parse_new_annotations(
             from .. import fields as fields_
             __fields[name] = fields_.Field(
                 name=name,
-                type=core.typings.utl.check.get_args(dtype)[0],
+                type=typ.utl.check.get_args(dtype)[0],
                 default=default,
                 required=required
                 )
@@ -130,16 +130,16 @@ def parse_new_namespace(
         else:
             raise exc.ReservedKeywordError(name)
 
-        if core.typings.utl.check.is_wrapper_type(dtype):
+        if typ.utl.check.is_wrapper_type(dtype):
             continue
         elif not is_snake_case:
             raise exc.IncorrectCasingError(tuple(__namespace))
         elif (
-            (is_field := core.typings.utl.check.is_field(default))
-            and core.typings.utl.check.is_field_type(dtype)
+            (is_field := typ.utl.check.is_field(default))
+            and typ.utl.check.is_field_type(dtype)
             ):
             default['name'] = name
-            default['type'] = core.typings.utl.check.get_args(dtype)[0]
+            default['type'] = typ.utl.check.get_args(dtype)[0]
         elif (
             is_field_as_dict := (
                 isinstance(default, dict)
@@ -151,10 +151,10 @@ def parse_new_namespace(
                     )
                 and __module != Constants.FIELDS_MODULE
                 )
-            and core.typings.utl.check.is_field_type(dtype)
+            and typ.utl.check.is_field_type(dtype)
             ):
             default['name'] = name
-            default['type'] = core.typings.utl.check.get_args(dtype)[0]
+            default['type'] = typ.utl.check.get_args(dtype)[0]
             from .. import fields as fields_
             __fields[name] = fields_.Field(default)
         elif (
@@ -164,7 +164,7 @@ def parse_new_namespace(
             raise exc.MissingTypeAnnotation(name)
         elif (
             (is_field or is_field_as_dict)
-            and not core.typings.utl.check.is_field_type(dtype)
+            and not typ.utl.check.is_field_type(dtype)
             ):
             raise exc.FieldAnnotationError(name, dtype)
 

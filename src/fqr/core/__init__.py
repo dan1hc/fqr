@@ -26,7 +26,6 @@ __all__ = (
     'lib',
     'strings',
     'typ',
-    'typings',
     )
 
 from . import cfg
@@ -36,4 +35,3 @@ from . import exc
 from . import lib
 from . import strings
 from . import typ
-from . import typings

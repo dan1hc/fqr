@@ -17,7 +17,6 @@ __all__ = (
     )
 
 from .. import codecs
-from .. import typings
 
 from . import cfg
 from . import enm
@@ -145,19 +144,21 @@ def camel_case_to_snake_case(
 
 @lib.t.overload
 def is_snake_case_iterable(
-    strings: typings.typ.Mapping[str, typ.AnyType]
+    strings: 'typ.Mapping[str, typ.AnyType]'
     ) -> lib.t.TypeGuard[
-        typings.typ.Mapping[typ.string[typ.snake_case], typ.AnyType]
+        'typ.Mapping[typ.string[typ.snake_case], typ.AnyType]'
         ]: ...
 @lib.t.overload
 def is_snake_case_iterable(
     strings: lib.t.Iterable[str]
-    ) -> lib.t.TypeGuard[lib.t.Iterable[typ.string[typ.snake_case]]]: ...
+    ) -> 'lib.t.TypeGuard[lib.t.Iterable[typ.string[typ.snake_case]]]': ...
 def is_snake_case_iterable(
-    strings: lib.t.Iterable[str] | typings.typ.Mapping[str, typ.AnyType]
+    strings: 'lib.t.Iterable[str] | typ.Mapping[str, typ.AnyType]'
     ) -> lib.t.TypeGuard[
-        lib.t.Iterable[typ.string[typ.snake_case]]
-        | typings.typ.Mapping[typ.string[typ.snake_case], typ.AnyType]
+        lib.t.Union[
+            'lib.t.Iterable[typ.string[typ.snake_case]]',
+            'typ.Mapping[typ.string[typ.snake_case], typ.AnyType]'
+            ]
         ]:
     """
     Check if all `strings` are `str[snake_case]`.
@@ -178,19 +179,21 @@ def is_snake_case_iterable(
 
 @lib.t.overload
 def isCamelCaseIterable(
-    strings: typings.typ.Mapping[str, typ.AnyType]
+    strings: 'typ.Mapping[str, typ.AnyType]'
     ) -> lib.t.TypeGuard[
-        typings.typ.Mapping[typ.string[typ.camelCase], typ.AnyType]
+        'typ.Mapping[typ.string[typ.camelCase], typ.AnyType]'
         ]: ...
 @lib.t.overload
 def isCamelCaseIterable(
     strings: lib.t.Iterable[str]
-    ) -> lib.t.TypeGuard[lib.t.Iterable[typ.string[typ.camelCase]]]: ...
+    ) -> 'lib.t.TypeGuard[lib.t.Iterable[typ.string[typ.camelCase]]]': ...
 def isCamelCaseIterable(
-    strings: lib.t.Iterable[str] | typings.typ.Mapping[str, typ.AnyType]
+    strings: 'lib.t.Iterable[str] | typ.Mapping[str, typ.AnyType]'
     ) -> lib.t.TypeGuard[
-        lib.t.Iterable[typ.string[typ.camelCase]]
-        | typings.typ.Mapping[typ.string[typ.camelCase], typ.AnyType]
+        lib.t.Union[
+            'lib.t.Iterable[typ.string[typ.camelCase]]',
+            'typ.Mapping[typ.string[typ.camelCase], typ.AnyType]'
+            ]
         ]:
     """
     Check if all `strings` are `str[camelCase]`.
@@ -211,16 +214,16 @@ def isCamelCaseIterable(
 
 @lib.t.overload
 def cname_for(
-    string: typ.AnyString | str,
+    string: 'typ.AnyString | str',
     container: tuple[typ.string[typ.StringType], ...]
     ) -> lib.t.Optional[typ.string[typ.StringType]]: ...
 @lib.t.overload
 def cname_for(
-    string: typ.AnyString | str,
+    string: 'typ.AnyString | str',
     container: tuple[str, ...]
     ) -> lib.t.Optional[str]: ...
 def cname_for(
-    string: typ.AnyString | str,
+    string: 'typ.AnyString | str',
     container: tuple[typ.string[typ.StringType] | str, ...]
     ) -> lib.t.Optional[typ.string[typ.StringType] | str]:
     """
@@ -345,7 +348,7 @@ def redact_string(string: str) -> str:
 
 @lib.t.overload
 def convert_for_repr(
-    obj_: typings.typ.Mapping[typ.Primitive, typ.Serial]
+    obj_: 'typ.Mapping[typ.Primitive, typ.Serial]'
     ) -> dict[typ.Primitive, typ.Serial]: ...
 @lib.t.overload
 def convert_for_repr(obj_: typ.Primitive) -> typ.Primitive: ...
@@ -360,12 +363,12 @@ def convert_for_repr(obj_: lib.t.Any) -> typ.Serial:
             return [Constants.M_LINE_TOKEN, *obj.StringWrapper.wrap(redacted)]
         else:
             return redacted
-    elif obj_ is None or typings.utl.check.is_primitive(obj_):
+    elif obj_ is None or typ.utl.check.is_primitive(obj_):
         return obj_
-    elif typings.utl.check.is_field(obj_):
+    elif typ.utl.check.is_field(obj_):
         from ... import objects
         return repr(objects.typ.Field(obj_, obj_.type_))  # type: ignore[call-overload]
-    elif typings.utl.check.is_typed(obj_):
+    elif typ.utl.check.is_typed(obj_):
         return {
             convert_for_repr(k): (
                 convert_for_repr(redact_key_value_pair(k, v))
@@ -376,9 +379,9 @@ def convert_for_repr(obj_: lib.t.Any) -> typ.Serial:
                 else convert_for_repr(v)
                 )
             for k
-            in typings.utl.hint.collect_annotations(obj_)
+            in typ.utl.hint.collect_annotations(obj_)
             }
-    elif typings.utl.check.is_mapping(obj_):
+    elif typ.utl.check.is_mapping(obj_):
         return {
             convert_for_repr(k): (
                 convert_for_repr(redact_key_value_pair(k, v))
@@ -388,7 +391,7 @@ def convert_for_repr(obj_: lib.t.Any) -> typ.Serial:
             for k, v
             in obj_.items()
             }
-    elif typings.utl.check.is_array(obj_):
+    elif typ.utl.check.is_array(obj_):
         if len(obj_) >= 1 and not all(isinstance(v, str) for v in obj_):
             return [
                 convert_for_repr(v)

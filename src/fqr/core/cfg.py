@@ -5,7 +5,9 @@ __all__ = (
     )
 
 from . import lib
-from . import typ
+
+if lib.t.TYPE_CHECKING:  # pragma: no cover
+    from . import typ
 
 
 class Constants:
@@ -14,7 +16,7 @@ class Constants:
     PACAKGE = 'fqr'
     """Reference to package name."""
 
-    CLASS_AS_DICT: typ.string[typ.snake_case] = 'class_as_dict'
+    CLASS_AS_DICT: 'typ.string[typ.snake_case]' = 'class_as_dict'
     """Common string reference."""
 
     DELIM = '-'
@@ -35,13 +37,13 @@ class Constants:
 
     DELIM_REBASE = '_X_'
 
-    __ANNOTATIONS__: typ.string[typ.snake_case] = '__annotations__'
-    __DATACLASS_FIELDS__: typ.string[typ.snake_case] = '__dataclass_fields__'
-    __DICT__: typ.string[typ.snake_case] = '__dict__'
-    __HERITAGE__: typ.string[typ.snake_case] = '__heritage__'
-    __SLOTS__: typ.string[typ.snake_case] = '__slots__'
-    __MODULE__: typ.string[typ.snake_case] = '__module__'
+    __ANNOTATIONS__: 'typ.string[typ.snake_case]' = '__annotations__'
+    __DATACLASS_FIELDS__: 'typ.string[typ.snake_case]' = '__dataclass_fields__'
+    __DICT__: 'typ.string[typ.snake_case]' = '__dict__'
+    __HERITAGE__: 'typ.string[typ.snake_case]' = '__heritage__'
+    __SLOTS__: 'typ.string[typ.snake_case]' = '__slots__'
+    __MODULE__: 'typ.string[typ.snake_case]' = '__module__'
 
-    FIELDS: typ.string[typ.snake_case] = 'fields'
-    ENUMERATIONS: typ.string[typ.snake_case] = 'enumerations'
-    HASH_FIELDS: typ.string[typ.snake_case] = 'hash_fields'
+    FIELDS: 'typ.string[typ.snake_case]' = 'fields'
+    ENUMERATIONS: 'typ.string[typ.snake_case]' = 'enumerations'
+    HASH_FIELDS: 'typ.string[typ.snake_case]' = 'hash_fields'

@@ -31,7 +31,9 @@ __all__ = (
 from .. import cfg
 from .. import lib
 from .. import obj
-from .. import typ
+
+if lib.t.TYPE_CHECKING:  # pragma: no cover
+    from .. import typ
 
 
 class Constants(cfg.Constants):
@@ -47,12 +49,12 @@ def get_args(tp: lib.t.Any) -> tuple[lib.t.Any, ...]:
 @lib.t.overload
 def get_type_args(
     tp: 'obj.SupportsParams[lib.Unpack[typ.ArgsType]]'
-    ) -> tuple[lib.Unpack[typ.ArgsType]]: ...
+    ) -> 'tuple[lib.Unpack[typ.ArgsType]]': ...
 @lib.t.overload
 def get_type_args(tp: lib.t.Any) -> tuple[lib.t.Any, ...]: ...
 def get_type_args(
     tp: 'obj.SupportsParams[lib.Unpack[typ.ArgsType]] | lib.t.Any'
-    ) -> tuple[lib.Unpack[typ.ArgsType]] | tuple[lib.t.Any, ...]:
+    ) -> 'tuple[lib.Unpack[typ.ArgsType]] | tuple[lib.t.Any, ...]':
     """
     Get generic arguments for `type[Any]`.
 
@@ -84,15 +86,15 @@ def get_type_args(
 
 @lib.t.overload
 def get_checkable_types(
-    any_tp: type[typ.AnyType]
-    ) -> tuple[type[typ.AnyType] | type, ...]: ...
+    any_tp: 'type[typ.AnyType]'
+    ) -> 'tuple[type[typ.AnyType] | type, ...]': ...
 @lib.t.overload
 def get_checkable_types(
     any_tp: lib.t.Any
     ) -> tuple[type, ...]: ...
 def get_checkable_types(
-    any_tp: type[typ.AnyType] | type[lib.t.Any] | lib.t.Any
-    ) -> tuple[typ.AnyType | type, ...] | tuple[type, ...]:
+    any_tp: 'type[typ.AnyType] | type[lib.t.Any] | lib.t.Any'
+    ) -> 'tuple[typ.AnyType | type, ...] | tuple[type, ...]':
     """
     Get checkable origin lib.types, handling `Union` and `TypeVar` \
     expansions automatically.
@@ -118,18 +120,18 @@ def get_checkable_types(
 
 @lib.t.overload
 def expand_types(
-    any_tp: type[typ.AnyType]
-    ) -> tuple[type[typ.AnyType] | type[lib.t.Any], ...]: ...
+    any_tp: 'type[typ.AnyType]'
+    ) -> 'tuple[type[typ.AnyType] | type[lib.t.Any], ...]': ...
 @lib.t.overload
 def expand_types(
     any_tp: lib.t.Any
-    ) -> tuple[type[lib.t.Any], ...]: ...
+    ) -> 'tuple[type[lib.t.Any], ...]': ...
 def expand_types(
-    any_tp: type[typ.AnyType] | lib.t.Any
-    ) ->(
-        tuple[type[typ.AnyType] | type[lib.t.Any], ...]
-        | tuple[type[lib.t.Any], ...]
-        ):
+    any_tp: 'type[typ.AnyType] | lib.t.Any'
+    ) -> lib.t.Union[
+        'tuple[type[typ.AnyType] | type[lib.t.Any], ...]',
+        tuple[type[lib.t.Any], ...]
+        ]:
     """
     Recursively get valid subtypes into flattened `tuple` from a \
     passed `type`, `Union`, or `TypeVar`.
@@ -216,20 +218,22 @@ def is_union(
     ) -> lib.t.TypeGuard[lib.lib.types.UnionType]:
     """Return `True` if obj is a `UnionType`."""
 
+    from .. import typ
+
     return isinstance(obj, (typ.UnionGenericAlias, lib.types.UnionType))
 
 
 @lib.t.overload
 def is_bool_type(
-    tp: type[typ.AnyType]
-    ) -> lib.t.TypeGuard[type[typ.AnyType]]: ...
+    tp: 'type[typ.AnyType]'
+    ) -> 'lib.t.TypeGuard[type[typ.AnyType]]': ...
 @lib.t.overload
 def is_bool_type(
     tp: type[lib.t.Any] | lib.t.Any
     ) -> lib.t.TypeGuard[type[bool]]: ...
 def is_bool_type(
-    tp: type[typ.AnyType] | type[lib.t.Any] | lib.t.Any
-    ) -> lib.t.TypeGuard[lib.t.Union[type[bool], type[typ.AnyType]]]:
+    tp: 'type[typ.AnyType] | type[lib.t.Any] | lib.t.Any'
+    ) -> 'lib.t.TypeGuard[type[bool] | type[typ.AnyType]]':
     """Return `True` if `tp` is `type[bool]`."""
 
     otps = get_checkable_types(tp)
@@ -242,15 +246,15 @@ def is_bool_type(
 
 @lib.t.overload
 def is_number_type(
-    tp: type[typ.NumberType]
-    ) -> lib.t.TypeGuard[type[typ.NumberType]]: ...
+    tp: 'type[typ.NumberType]'
+    ) -> 'lib.t.TypeGuard[type[typ.NumberType]]': ...
 @lib.t.overload
 def is_number_type(
     tp: type[lib.t.Any] | lib.t.Any
     ) -> lib.t.TypeGuard[type[lib.numbers.Number]]: ...
 def is_number_type(
-    tp: type[typ.NumberType] | type[lib.t.Any] | lib.t.Any
-    ) -> lib.t.TypeGuard[type[lib.numbers.Number] | type[typ.NumberType]]:
+    tp: 'type[typ.NumberType] | type[lib.t.Any] | lib.t.Any'
+    ) -> 'lib.t.TypeGuard[type[lib.numbers.Number] | type[typ.NumberType]]':
     """Return `True` if tp is `numbers.Number`."""
 
     otps = get_checkable_types(tp)
@@ -276,7 +280,7 @@ def is_ellipsis(
 
 def is_literal(
     tp: type[lib.t.Any] | lib.t.Any
-    ) -> lib.t.TypeGuard[typ.Literal]:
+    ) -> 'lib.t.TypeGuard[typ.Literal]':
     """Return `True` if `tp` is a `Literal`."""
 
     otp = lib.t.get_origin(tp) or tp
@@ -312,7 +316,7 @@ def is_datetime_type(
 
 def is_none_type(
     tp: type[lib.t.Any] | lib.t.Any,
-    ) -> lib.t.TypeGuard[type[typ.NoneType]]:
+    ) -> 'lib.t.TypeGuard[type[typ.NoneType]]':
     """Return `True` if `tp` is `NoneType`."""
 
     otps = get_checkable_types(tp)
@@ -325,19 +329,23 @@ def is_none_type(
 
 def is_primitive(
     obj: lib.t.Any
-    ) -> lib.t.TypeGuard[typ.Primitive]:
+    ) -> 'lib.t.TypeGuard[typ.Primitive]':
     """Return `True` if `obj` is a `Primitive`."""
+
+    from .. import typ
 
     return isinstance(obj, get_checkable_types(typ.Primitive))
 
 
 def is_serialized_mapping(
     obj: lib.t.Any | type[lib.t.Any]
-    ) -> lib.t.TypeGuard['typ.Mapping[typ.Primitive, typ.Serial]']:
+    ) -> 'lib.t.TypeGuard[typ.Mapping[typ.Primitive, typ.Serial]]':
     """
     Return `True` if `obj` is `MappingProto[typ.Primitive, typ.Serial]`.
 
     """
+
+    from .. import typ
 
     return (
         isinstance(obj, lib.t.Mapping)
@@ -353,10 +361,9 @@ def is_serialized_mapping(
 
 
 def is_mapping(
-    obj: typ.MappingType | lib.t.Any
+    obj: 'typ.MappingType | lib.t.Any'
     ) -> lib.t.TypeGuard[
-        typ.MappingType
-        | 'typ.Mapping[lib.t.Any, lib.t.Any]'
+        'typ.MappingType | typ.Mapping[lib.t.Any, lib.t.Any]'
         ]:
     """Return `True` if `obj` is `Mapping[lib.t.Any, lib.t.Any]`."""
 
@@ -364,8 +371,8 @@ def is_mapping(
 
 
 def is_mapping_type(
-    tp: type[typ.MappingType] | type[lib.t.Any] | lib.t.Any
-    ) -> lib.t.TypeGuard[type[typ.MappingType]]:
+    tp: 'type[typ.MappingType] | type[lib.t.Any] | lib.t.Any'
+    ) -> 'lib.t.TypeGuard[type[typ.MappingType]]':
     """Return `True` if `tp` is `type[Mapping[lib.t.Any, lib.t.Any]]`."""
 
     otps = get_checkable_types(tp)
@@ -379,14 +386,14 @@ def is_mapping_type(
 @lib.t.overload
 def is_array(
     obj: 'typ.Array[typ.AnyType]',
-    ) -> lib.t.TypeGuard['typ.Array[typ.AnyType]']: ...
+    ) -> 'lib.t.TypeGuard[typ.Array[typ.AnyType]]': ...
 @lib.t.overload
 def is_array(
     obj: lib.t.Any,
-    ) -> lib.t.TypeGuard['typ.Array[lib.t.Any]']: ...
+    ) -> 'lib.t.TypeGuard[typ.Array[lib.t.Any]]': ...
 def is_array(
     obj: 'typ.Array[typ.AnyType | lib.t.Any] | lib.t.Any'
-    ) -> lib.t.TypeGuard['typ.Array[typ.AnyType | lib.t.Any]']:
+    ) -> 'lib.t.TypeGuard[typ.Array[typ.AnyType | lib.t.Any]]':
     """Return `True` if `obj` is `Array[lib.t.Any]`."""
 
     return (
@@ -425,7 +432,7 @@ def is_field(
 def is_field_type(
     tp: 'type[typ.AnyField[typ.AnyType]] | lib.t.Any'
     ) -> lib.t.TypeGuard[
-        type['typ.AnyField[typ.AnyType]'] | type['typ.AnyField[lib.t.Any]']
+        'type[typ.AnyField[typ.AnyType]] | type[typ.AnyField[lib.t.Any]]'
         ]:
     """Return `True` if `tp` is `typ[AnyField[Any]]`."""
 
@@ -445,8 +452,8 @@ def is_field_type(
 
 
 def is_wrapper_type(
-    tp: typ.Wrapper | type[lib.t.Any] | lib.t.Any
-    ) -> lib.t.TypeGuard[typ.Wrapper]:
+    tp: 'typ.Wrapper | type[lib.t.Any] | lib.t.Any'
+    ) -> lib.t.TypeGuard['typ.Wrapper']:
     """Return `True` if `tp` is `Annotated | ClassVar | Final | InitVar`."""
 
     if isinstance(tp, lib.t.ForwardRef):
@@ -463,8 +470,8 @@ def is_wrapper_type(
 
 
 def is_typed(
-    any: type[typ.Typed] | type[lib.t.Any] | lib.t.Any
-    ) -> lib.t.TypeGuard[type[typ.Typed]]:
+    any: 'type[typ.Typed] | type[lib.t.Any] | lib.t.Any'
+    ) -> 'lib.t.TypeGuard[type[typ.Typed]]':
     """Return `True` if `any` is type-hinted."""
 
     return (
@@ -481,8 +488,8 @@ def is_typed(
 
 
 def is_array_type(
-    tp: type[typ.ArrayType] | type[lib.t.Any] | lib.t.Any
-    ) -> lib.t.TypeGuard[type[typ.ArrayType]]:
+    tp: 'type[typ.ArrayType] | type[lib.t.Any] | lib.t.Any'
+    ) -> 'lib.t.TypeGuard[type[typ.ArrayType]]':
     """Return `True` if `tp` is `type[Array[lib.t.Any]]`."""
 
     otps = get_checkable_types(tp)
@@ -497,8 +504,8 @@ def is_array_type(
 
 
 def is_variadic_array_type(
-    tp: type[typ.VariadicArrayType] | type[lib.t.Any] | lib.t.Any
-    ) -> lib.t.TypeGuard[type[typ.VariadicArrayType]]:
+    tp: 'type[typ.VariadicArrayType] | type[lib.t.Any] | lib.t.Any'
+    ) -> 'lib.t.TypeGuard[type[typ.VariadicArrayType]]':
     """Return `True` if `tp` is `type[VariadicArray]`."""
 
     otps = get_checkable_types(tp)
@@ -511,8 +518,10 @@ def is_variadic_array_type(
 
 def is_immutable_type(
     tp: type[lib.t.Any],
-    ) -> lib.t.TypeGuard[type['typ.Immutable']]:
+    ) -> 'lib.t.TypeGuard[type[typ.Immutable]]':
     """Return `True` if tp is an immutable standardlib type."""
+
+    from .. import typ
 
     for sub_tp in expand_types(tp):
         if all(

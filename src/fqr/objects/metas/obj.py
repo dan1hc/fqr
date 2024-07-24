@@ -60,7 +60,7 @@ class Meta(type):
         annotations: typ.SnakeDict
         annotations = __namespace.pop(Constants.__ANNOTATIONS__, {})
         annotations |= {
-            k: core.typings.utl.hint.resolve_type(
+            k: typ.utl.hint.resolve_type(
                 v,
                 lib.sys.modules[module].__dict__
                 )
@@ -194,7 +194,7 @@ class Meta(type):
         ) -> lib.t.Optional[lib.Never]:
         if (
             (cname := core.strings.utl.cname_for(__name, cls.fields))
-            and not core.typings.utl.check.is_field(__value)
+            and not typ.utl.check.is_field(__value)
             ):
             raise exc.IncorrectTypeError(__name, type(__value), __value)
         elif cname:
@@ -230,7 +230,7 @@ class Meta(type):
             and (k := core.strings.utl.cname_for(__key, cls.fields))
             ):
             return cls.__dataclass_fields__[k]
-        elif core.typings.utl.check.is_field_type(cls):
+        elif typ.utl.check.is_field_type(cls):
             return typ.Field(cls, __key)
         else:
             raise KeyError(__key)
@@ -263,7 +263,7 @@ class Meta(type):
         ) -> lib.t.Optional[lib.Never]:
         """Set Field for key dict style."""
 
-        if not core.typings.utl.check.is_field(__value):
+        if not typ.utl.check.is_field(__value):
             from .. import fields as fields_
             raise exc.IncorrectTypeError(__key, fields_.Field, __value)
         elif (
@@ -273,14 +273,14 @@ class Meta(type):
             raise exc.InvalidFieldRedefinitionError(__value['name'])
         elif k and not issubclass(
             __value['type'],
-            core.typings.utl.check.get_checkable_types(
+            typ.utl.check.get_checkable_types(
                 (ftype := cls.__dataclass_fields__[k]['type'])
                 )
             ):
             raise exc.IncorrectTypeError(k, ftype, __value['type'])
         elif k and not isinstance(
             __value['default'],
-            core.typings.utl.check.get_checkable_types(
+            typ.utl.check.get_checkable_types(
                 (ftype := cls.__dataclass_fields__[k]['type'])
                 )
             ):

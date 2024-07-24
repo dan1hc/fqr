@@ -1,6 +1,7 @@
 """Typing objects."""
 
 __all__ = (
+    'string',
     'ArrayProto',
     'FieldPattern',
     'MappingProto',
@@ -12,41 +13,42 @@ __all__ = (
     'WrapperPattern',
     )
 
-from .. import typ
-
 from . import cfg
 from . import lib
+
+if lib.t.TYPE_CHECKING:  # pragma: no cover
+    from . import typ  # noqa: F401
 
 
 class Constants(cfg.Constants):
     """Constant values specific to this file."""
 
 
-FieldPattern = lib.re.compile(
-    r'(fqr(\.[a-zA-Z]{1,32}){0,32}\.)?Field'
-    r'\[((\[)?[\.\|\,a-zA-Z0-9_ ]{1,64}(\])?){1,64}\]'
-    )
+# Note: these need to be here to avoid circular import.
+# They are however imported by adjacent typ and injected
+# to typ's __all__ for consistency.
+AnyType = lib.t.TypeVar('AnyType')
+AnyOtherType = lib.t.TypeVar('AnyOtherType')
+AnyTypeCo = lib.t.TypeVar('AnyTypeCo', covariant=True)
+AnyOtherTypeCo = lib.t.TypeVar('AnyOtherTypeCo', covariant=True)
+ArgsType = lib.TypeVarTuple('ArgsType')
+StringType = lib.t.TypeVar('StringType', bound='typ.StringFormat')
 
-WrapperPattern = lib.re.compile(
-    r'([a-zA-Z]{1,64}\.?)?(Annotated|ClassVar|Final|InitVar)'
-    r'\[((\[)?[\.\|\,a-zA-Z0-9_ ]{1,64}(\])?){1,64}\]'
-    )
 
-
-class ArrayProto(lib.t.Protocol, lib.t.Collection[typ.AnyTypeCo]):
+class ArrayProto(lib.t.Protocol, lib.t.Collection[AnyTypeCo]):
     """Protocol for a generic, single-parameter array."""
 
     def __init__(
         self,
-        iterable: lib.t.Iterable[typ.AnyTypeCo],
+        iterable: lib.t.Iterable[AnyTypeCo],
         /
         ) -> None: ...
 
-    def __iter__(self) -> lib.t.Iterator[typ.AnyTypeCo]: ...
+    def __iter__(self) -> lib.t.Iterator[AnyTypeCo]: ...
 
 
 class VariadicArrayProto(
-    ArrayProto[tuple[lib.Unpack[typ.ArgsType]]],
+    ArrayProto[tuple[lib.Unpack[ArgsType]]],
     lib.t.Protocol
     ):
     """Protocol for a generic, any-parameter array."""
@@ -56,25 +58,25 @@ class VariadicArrayProto(
 
 class MappingProto(
     lib.t.Protocol,
-    lib.t.Generic[typ.AnyTypeCo, typ.AnyOtherTypeCo]
+    lib.t.Generic[AnyTypeCo, AnyOtherTypeCo]
     ):
     """Protocol for a generic, double-parameter mapping."""
 
     def __init__(self, *args: lib.t.Any, **kwargs: lib.t.Any) -> None: ...
 
-    def __iter__(self) -> lib.t.Iterator[typ.AnyTypeCo]: ...
+    def __iter__(self) -> lib.t.Iterator[AnyTypeCo]: ...
 
     def __getitem__(
         self,
         __name: str,
-        __default: lib.t.Optional[typ.AnyType] = None
-        ) -> typ.AnyTypeCo | typ.AnyType: ...
+        __default: lib.t.Optional[AnyType] = None
+        ) -> AnyTypeCo | AnyType: ...
 
-    def items(self) -> lib.t.ItemsView[typ.AnyTypeCo, typ.AnyOtherTypeCo]: ...
+    def items(self) -> lib.t.ItemsView[AnyTypeCo, AnyOtherTypeCo]: ...
 
-    def keys(self) -> lib.t.KeysView[typ.AnyTypeCo]: ...
+    def keys(self) -> lib.t.KeysView[AnyTypeCo]: ...
 
-    def values(self) -> lib.t.ValuesView[typ.AnyOtherTypeCo]: ...
+    def values(self) -> lib.t.ValuesView[AnyOtherTypeCo]: ...
 
 
 class SupportsAnnotations(lib.t.Protocol):
@@ -95,17 +97,17 @@ class SupportsAnnotations(lib.t.Protocol):
     def __init__(self, *args: lib.t.Any, **kwargs: lib.t.Any) -> None: ...
 
 
-class SupportsParams(lib.t.Protocol, lib.t.Generic[lib.Unpack[typ.ArgsType]]):
+class SupportsParams(lib.t.Protocol, lib.t.Generic[lib.Unpack[ArgsType]]):
     """Protocol for a generic with any number of parameters."""
 
     if lib.sys.version_info >= (3, 9):
         def __class_getitem__(
             cls,
-            item: tuple[lib.Unpack[typ.ArgsType]],
+            item: tuple[lib.Unpack[ArgsType]],
             /
             ) -> lib.types.GenericAlias: ...
 
-    __args__: tuple[lib.Unpack[typ.ArgsType]]
+    __args__: tuple[lib.Unpack[ArgsType]]
 
     def __hash__(self) -> int: ...
 
@@ -113,15 +115,15 @@ class SupportsParams(lib.t.Protocol, lib.t.Generic[lib.Unpack[typ.ArgsType]]):
 class MetaLike(lib.t.Protocol):
     """Meta protocol."""
 
-    __annotations__: typ.SnakeDict
-    __dataclass_fields__: lib.t.ClassVar[typ.DataClassFields]
+    __annotations__: 'typ.SnakeDict'
+    __dataclass_fields__: 'lib.t.ClassVar[typ.DataClassFields]'
 
 
 class ObjectLike(lib.t.Protocol):
     """Object protocol."""
 
-    __annotations__: typ.SnakeDict
-    __dataclass_fields__: lib.t.ClassVar[typ.DataClassFields]
+    __annotations__: 'typ.SnakeDict'
+    __dataclass_fields__: 'lib.t.ClassVar[typ.DataClassFields]'
 
     def __contains__(self, __key: lib.t.Any, /) -> bool: ...
 
@@ -137,23 +139,23 @@ class ObjectLike(lib.t.Protocol):
 
     def get(
         self,
-        __key: typ.AnyString,
-        __default: typ.AnyType = None
-        ) -> lib.t.Any | typ.AnyType: ...
+        __key: 'typ.AnyString',
+        __default: AnyType = None
+        ) -> lib.t.Any | AnyType: ...
 
     def items(
         self
-        ) -> lib.t.ItemsView[typ.string[typ.snake_case], lib.t.Any]: ...
+        ) -> 'lib.t.ItemsView[typ.string[typ.snake_case], lib.t.Any]': ...
 
     @classmethod
-    def keys(cls) -> lib.t.KeysView[typ.string[typ.snake_case]]: ...
+    def keys(cls) -> 'lib.t.KeysView[typ.string[typ.snake_case]]': ...
 
     def pop(
         self,
         __key: str,
         /,
-        __default: typ.AnyType = Constants.UNDEFINED
-        ) -> typ.AnyType | lib.t.Any | lib.Never: ...
+        __default: AnyType = Constants.UNDEFINED
+        ) -> AnyType | lib.t.Any | lib.Never: ...
 
     def setdefault(
         self,
@@ -170,13 +172,13 @@ class ObjectLike(lib.t.Protocol):
         self,
         camel_case: lib.t.Literal[False] = False,
         include_null: bool = True
-        ) -> typ.SnakeDict: ...
+        ) -> 'typ.SnakeDict': ...
     @lib.t.overload
     def to_dict(
         self,
         camel_case: lib.t.Literal[True],
         include_null: bool
-        ) -> typ.CamelDict: ...
+        ) -> 'typ.CamelDict': ...
     @lib.t.overload
     def to_dict(
         self,
@@ -188,3 +190,18 @@ class ObjectLike(lib.t.Protocol):
         camel_case: bool = False,
         include_null: bool = True
         ) -> 'typ.SnakeDict | typ.CamelDict': ...
+
+
+class string(str, lib.t.Generic[StringType]):
+    """Generic `str` protocol."""
+
+
+FieldPattern = lib.re.compile(
+    r'(fqr(\.[a-zA-Z]{1,32}){0,32}\.)?Field'
+    r'\[((\[)?[\.\|\,a-zA-Z0-9_ ]{1,64}(\])?){1,64}\]'
+    )
+
+WrapperPattern = lib.re.compile(
+    r'([a-zA-Z]{1,64}\.?)?(Annotated|ClassVar|Final|InitVar)'
+    r'\[((\[)?[\.\|\,a-zA-Z0-9_ ]{1,64}(\])?){1,64}\]'
+    )

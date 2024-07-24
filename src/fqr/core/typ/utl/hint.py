@@ -7,22 +7,24 @@ __all__ = (
 
 from .. import cfg
 from .. import lib
-from .. import obj
-from .. import typ
 
 from . import check
+
+if lib.t.TYPE_CHECKING:  # pragma: no cover
+    from .. import obj
+    from .. import typ
 
 
 class Constants(cfg.Constants):
     """Constant values specific to this file."""
 
-    CACHED_ANNOTATIONS: dict[str, typ.AnyDict] = {}
+    CACHED_ANNOTATIONS: 'dict[str, typ.AnyDict]' = {}
     """Local cache for typed object annotations."""
 
 
 eval_type: lib.t.Callable[
     [
-        typ.AnyOrForwardRef,
+        'typ.AnyOrForwardRef',
         lib.t.Any,
         lib.t.Any,
         lib.t.Optional[frozenset]
@@ -46,19 +48,19 @@ For use of globalns and localns see the docstring for `get_type_hints()`.
 def parse_ref_to_typ(
     ref: lib.t.ForwardRef,
     globalns: None,
-    localns: typ.OptionalAnyDict
+    localns: 'typ.OptionalAnyDict'
     ) -> lib.t.ForwardRef: ...
 @lib.t.overload
 def parse_ref_to_typ(
     ref: lib.t.ForwardRef,
-    globalns: typ.OptionalAnyDict,
-    localns: typ.OptionalAnyDict
-    ) -> typ.AnyOrForwardRef: ...
+    globalns: 'typ.OptionalAnyDict',
+    localns: 'typ.OptionalAnyDict'
+    ) -> 'typ.AnyOrForwardRef': ...
 def parse_ref_to_typ(
     ref: lib.t.ForwardRef,
-    globalns: typ.OptionalAnyDict = None,
-    localns: typ.OptionalAnyDict = None
-    ) -> typ.AnyOrForwardRef:
+    globalns: 'typ.OptionalAnyDict' = None,
+    localns: 'typ.OptionalAnyDict' = None
+    ) -> 'typ.AnyOrForwardRef':
     """Attempt to cast `ForwardRef` to `type`."""
 
     try:
@@ -89,31 +91,31 @@ def parse_str_to_ref(
 
 @lib.t.overload
 def resolve_type(
-    typ_ref_or_str: typ.AnyType | typ.StrOrForwardRef,
-    globalns: typ.AnyDict,
-    localns: typ.AnyDict,
+    typ_ref_or_str: 'typ.AnyType | typ.StrOrForwardRef',
+    globalns: 'typ.AnyDict',
+    localns: 'typ.AnyDict',
     is_argument: bool
-    ) -> typ.AnyType | lib.t.Any: ...
+    ) -> 'typ.AnyType | lib.t.Any': ...
 @lib.t.overload
 def resolve_type(
-    typ_ref_or_str: typ.AnyType | typ.StrOrForwardRef,
-    globalns: typ.OptionalAnyDict,
-    localns: typ.OptionalAnyDict,
+    typ_ref_or_str: 'typ.AnyType | typ.StrOrForwardRef',
+    globalns: 'typ.OptionalAnyDict',
+    localns: 'typ.OptionalAnyDict',
     is_argument: bool
-    ) -> typ.AnyType | typ.AnyOrForwardRef: ...
+    ) -> 'typ.AnyType | typ.AnyOrForwardRef': ...
 @lib.t.overload
 def resolve_type(
-    typ_ref_or_str: typ.StrOrForwardRef,
-    globalns: typ.OptionalAnyDict = None,
-    localns: typ.OptionalAnyDict = None,
+    typ_ref_or_str: 'typ.StrOrForwardRef',
+    globalns: 'typ.OptionalAnyDict' = None,
+    localns: 'typ.OptionalAnyDict' = None,
     is_argument: bool = False
-    ) -> typ.AnyOrForwardRef: ...
+    ) -> 'typ.AnyOrForwardRef': ...
 def resolve_type(
-    typ_ref_or_str: typ.AnyType | typ.StrOrForwardRef,
-    globalns: typ.OptionalAnyDict = None,
-    localns: typ.OptionalAnyDict = None,
+    typ_ref_or_str: 'typ.AnyType | typ.StrOrForwardRef',
+    globalns: 'typ.OptionalAnyDict' = None,
+    localns: 'typ.OptionalAnyDict' = None,
     is_argument: bool = False
-    ) -> typ.AnyType | typ.AnyOrForwardRef:
+    ) -> 'typ.AnyType | typ.AnyOrForwardRef':
     """
     Attempt to resolve `str` or `ForwardRef` to `type`.
 
@@ -143,10 +145,10 @@ def resolve_type(
 
 def _collect_annotations(
     __name: str,
-    __annotations: typ.AnyDict,
+    __annotations: 'typ.AnyDict',
     __bases: tuple[type, ...]
-    ) -> typ.AnyDict:
-    annotations: typ.AnyDict = {}
+    ) -> 'typ.AnyDict':
+    annotations: 'typ.AnyDict' = {}
     for _base in reversed(__bases):
         for __base in reversed(_base.__mro__):
             annotations |= getattr(__base, '__annotations__', {})
@@ -164,8 +166,8 @@ def _collect_annotations(
 
 
 def collect_annotations(
-    typed_obj: obj.SupportsAnnotations | type[obj.SupportsAnnotations]
-    ) -> typ.AnyDict:
+    typed_obj: 'obj.SupportsAnnotations | type[obj.SupportsAnnotations]'
+    ) -> 'typ.AnyDict':
     """
     Get all type annotations for `typed_obj`.
 

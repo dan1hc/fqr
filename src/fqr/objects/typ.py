@@ -41,7 +41,7 @@ class Field(lib.types.GenericAlias, lib.t.Generic[AnyTypeCo]):
         ftypes = lib.t.get_args(self)
         _delim = (
             ' | '
-            if core.typings.utl.check.is_union(self)
+            if core.typ.utl.check.is_union(self)
             else ', '
             )
         _ftypes = _delim.join(

@@ -457,7 +457,7 @@ class Field(objs.Object, lib.t.Generic[typ.AnyType]):
         self,
         other: 'object | lib.t.Any | typ.AnyField[lib.t.Any]'
         ) -> 'bool | queries.EqQueryCondition | lib.Never':
-        if core.typings.utl.check.is_field(other):
+        if typ.utl.check.is_field(other):
             return self.__field_hash__() == other.__field_hash__()
         self._validate_comparison(other)
         from .. import queries
@@ -485,7 +485,7 @@ class Field(objs.Object, lib.t.Generic[typ.AnyType]):
         self,
         other: 'object | lib.t.Any | typ.AnyField[lib.t.Any]'
         ) -> 'bool | queries.NeQueryCondition | lib.Never':
-        if core.typings.utl.check.is_field(other):
+        if typ.utl.check.is_field(other):
             return self.__field_hash__() != other.__field_hash__()
         self._validate_comparison(other)
         from .. import queries
@@ -547,7 +547,7 @@ class Field(objs.Object, lib.t.Generic[typ.AnyType]):
     @lib.t.overload
     def __lshift__(
         self,
-        value: core.typings.obj.ObjectLike
+        value: typ.obj.ObjectLike
         ) -> lib.Self | lib.Never: ...
     @lib.t.overload
     def __lshift__(
@@ -560,13 +560,13 @@ class Field(objs.Object, lib.t.Generic[typ.AnyType]):
             ]: ...
     def __lshift__(
         self,
-        value: 'lib.t.Any | core.typings.obj.ObjectLike'
+        value: 'lib.t.Any | typ.obj.ObjectLike'
         ) -> lib.t.Union[
             'queries.ContainsQueryCondition',
             'Field[lib.t.Any]',
             lib.Never
             ]:
-        if core.typings.utl.check.is_field(value):
+        if typ.utl.check.is_field(value):
             return super().__lshift__(value)
         self._validate_iterable_comparison(value)
         from .. import queries
@@ -692,7 +692,7 @@ class Field(objs.Object, lib.t.Generic[typ.AnyType]):
             value is not None
             and not isinstance(
                 value,
-                core.typings.utl.check.get_checkable_types(self.type_)
+                typ.utl.check.get_checkable_types(self.type_)
                 )
             ):
             raise exc.InvalidComparisonTypeError(
@@ -710,7 +710,7 @@ class Field(objs.Object, lib.t.Generic[typ.AnyType]):
         if not any(
             issubclass(tp, lib.t.Iterable)
             for tp
-            in core.typings.utl.check.get_checkable_types(self.type_)
+            in typ.utl.check.get_checkable_types(self.type_)
             ):
             raise exc.InvalidContainerComparisonTypeError(
                 self.name,
@@ -767,7 +767,7 @@ class Field(objs.Object, lib.t.Generic[typ.AnyType]):
             not in Constants.FACTORY_CACHE
             ):
             if (
-                core.typings.utl.check.is_immutable_type(
+                typ.utl.check.is_immutable_type(
                     self.type_ or type(self.default)
                     )
                 ):

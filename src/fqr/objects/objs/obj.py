@@ -102,7 +102,7 @@ class ObjectBase(metaclass=metas.Meta):
                 k,
                 (
                     field_.factory()
-                    if core.typings.utl.check.is_field(
+                    if typ.utl.check.is_field(
                         field_ := self.__dataclass_fields__[k]
                         )
                     else field_['default']
@@ -130,7 +130,7 @@ class ObjectBase(metaclass=metas.Meta):
                 ):
                 return value.to_dict()
             elif (
-                core.typings.utl.check.is_array(value)
+                typ.utl.check.is_array(value)
                 and (
                     callers := lib.t.cast(
                         lib.types.FrameType,
@@ -151,13 +151,13 @@ class ObjectBase(metaclass=metas.Meta):
                 ):
                 return value.__class__(
                     item.to_dict()
-                    if core.typings.utl.check.is_object(item)
+                    if typ.utl.check.is_object(item)
                     else item
                     for item
                     in value
                     )
             elif (
-                core.typings.utl.check.is_mapping(value)
+                typ.utl.check.is_mapping(value)
                 and (
                     callers := lib.t.cast(
                         lib.types.FrameType,
@@ -180,11 +180,11 @@ class ObjectBase(metaclass=metas.Meta):
                     {
                         (
                             k.to_dict()
-                            if core.typings.utl.check.is_object(k)
+                            if typ.utl.check.is_object(k)
                             else k
                             ): (
                                 v.to_dict()
-                                if core.typings.utl.check.is_object(v)
+                                if typ.utl.check.is_object(v)
                                 else v
                                 )
                         for k, v
@@ -308,7 +308,7 @@ class ObjectBase(metaclass=metas.Meta):
     @lib.t.overload
     def __lshift__(
         self,
-        other: core.typings.obj.ObjectLike,
+        other: typ.obj.ObjectLike,
         ) -> lib.Self: ...
     @lib.t.overload
     def __lshift__(
@@ -321,7 +321,7 @@ class ObjectBase(metaclass=metas.Meta):
             ]: ...
     def __lshift__(
         self,
-        other: core.typings.obj.ObjectLike | lib.t.Any
+        other: typ.obj.ObjectLike | lib.t.Any
         ) -> lib.t.Union[
             lib.Self,
             'queries.ContainsQueryCondition',
@@ -350,7 +350,7 @@ class ObjectBase(metaclass=metas.Meta):
 
     def __rshift__(
         self,
-        other: core.typings.obj.ObjectLike
+        other: typ.obj.ObjectLike
         ) -> lib.Self:
         """
         Overwrite values from other if populated with non-default \
@@ -392,7 +392,7 @@ class ObjectBase(metaclass=metas.Meta):
         self.update(self.__class__(state))
         return None
 
-    def __ior__(self, other: core.typings.obj.ObjectLike, /) -> None:
+    def __ior__(self, other: typ.obj.ObjectLike, /) -> None:
         self.update(other)
         return None
 
@@ -500,7 +500,7 @@ class ObjectBase(metaclass=metas.Meta):
 
         return None
 
-    def update(self, other: core.typings.obj.ObjectLike, /) -> None:
+    def update(self, other: typ.obj.ObjectLike, /) -> None:
         """Update values like a `dict`."""
 
         for k, v in other.items():
@@ -566,7 +566,7 @@ class ObjectBase(metaclass=metas.Meta):
         for key, value in d.items():
             if isinstance(value, Object):
                 as_dict[key] = value.to_dict(camel_case, include_null)
-            elif core.typings.utl.check.is_array(value):
+            elif typ.utl.check.is_array(value):
                 as_dict[key] = value.__class__(
                     (
                         v.to_dict(camel_case, include_null)
@@ -578,7 +578,7 @@ class ObjectBase(metaclass=metas.Meta):
                         or include_null
                         )
                     )
-            elif core.typings.utl.check.is_mapping(value):
+            elif typ.utl.check.is_mapping(value):
                 as_dict[key] = value.__class__(
                     **{
                         (
