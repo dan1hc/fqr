@@ -1,5 +1,41 @@
 # CHANGELOG
 
+## v0.5.0 (2024-07-24)
+
+### Feature
+
+* feat: __fields_and_objs__ (#20)
+
+* feat: __fields_and_objs__
+
+Implements `fqr.Field` and `fqr.Object`. Still need to expand test suite to cover `fqr/objects` dir.
+
+close #15
+
+* docs: __v0.5.0-rc.1__
+
+* fix: __inefficient_regex__
+
+* docs: __v0.5.0-rc.2__
+
+* style: __cfg_not_cns__
+
+* refactor: __consolidate_typ__
+
+* refactor: __error_ref_exc_for_fields__
+
+* refactor: __mypy_11_compliance__
+
+* docs: __v0.5.0-rc.3__
+
+* test: __finish_obj_tests__
+
+* docs: __v0.5.0-rc.4__
+
+---------
+
+Co-authored-by: github-actions &lt;action@github.com&gt; ([`56b59df`](https://github.com/dan1hc/fqr/commit/56b59dff3203ac9eb6a9e09ebd28b35a4981010e))
+
 ## v0.4.0 (2024-07-18)
 
 ### Ci
