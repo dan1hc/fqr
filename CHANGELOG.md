@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## v0.5.1 (2024-07-24)
+
+### Fix
+
+* fix: __fix_docs__ (#24)
+
+* fix: __fix_docs__
+
+* docs: __v0.5.1-rc.1__
+
+---------
+
+Co-authored-by: github-actions &lt;action@github.com&gt; ([`cde6cad`](https://github.com/dan1hc/fqr/commit/cde6cad659c5bc9f6975953fcb658fe066915926))
+
 ## v0.5.0 (2024-07-24)
 
 ### Feature
