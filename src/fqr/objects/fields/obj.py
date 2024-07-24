@@ -298,9 +298,17 @@ class Field(objs.Object, lib.t.Generic[typ.AnyType]):
     def __set__(
         self,
         __object: lib.t.Any,
-        __value: typ.AnyType,
+        __value: typ.AnyType
         ) -> lib.t.Optional[lib.Never]:
-        object.__setattr__(__object, self.name, self.parse(__value))
+        if isinstance(__value, str):
+            object.__setattr__(__object, self.name, self.parse(__value))
+        elif isinstance(
+            __value,
+            typ.utl.check.get_checkable_types(self.type_)
+            ):
+            object.__setattr__(__object, self.name, __value)
+        else:
+            raise exc.IncorrectTypeError(self.name, self.type_, __value)
         return None
 
     @lib.t.overload
@@ -381,9 +389,9 @@ class Field(objs.Object, lib.t.Generic[typ.AnyType]):
             kwargs |= class_as_dict  # type: ignore[arg-type]
         else:
             kwargs |= dict(
-                type_=kwargs.pop(
-                    'type_',
-                    kwargs.pop('type', lib.t.cast(type[typ.AnyType], type_))
+                type_=lib.t.cast(
+                    type[typ.AnyType],
+                    kwargs.pop('type_', kwargs.pop('type', type_))
                     ),
                 default=default,
                 required=required,
@@ -523,11 +531,7 @@ class Field(objs.Object, lib.t.Generic[typ.AnyType]):
         ) -> 'queries.SimilarQueryCondition | lib.Never':
         if isinstance(params, tuple):
             value, threshold = params
-            if not (
-                isinstance(threshold, float)
-                and threshold >= 0.0
-                and threshold <= 1.0
-                ):
+            if not isinstance(threshold, float):
                 threshold = enm.MatchThreshold.default.value
         else:
             value = params
@@ -723,7 +727,7 @@ class Field(objs.Object, lib.t.Generic[typ.AnyType]):
     def parse(
         self,
         value: lib.t.Any,
-        validate_dtype: bool = True,
+        raise_validation_error: bool = True,
         ) -> lib.t.Optional[typ.AnyType] | lib.Never:
         """
         Return correctly typed value if possible, `None` otherwise, or \
@@ -734,7 +738,7 @@ class Field(objs.Object, lib.t.Generic[typ.AnyType]):
 
         parsed = core.codecs.utl.parse(value, self.type_)
         if isinstance(parsed, core.codecs.enm.ParseErrorRef):
-            if validate_dtype:
+            if raise_validation_error:
                 raise exc.TypeValidationError(self.name, self.type_, parsed)
             else:
                 return None

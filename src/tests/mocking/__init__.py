@@ -29,18 +29,14 @@ class Derivative(fqr.Object):
         default=False,
         enum=fqr.core.enm.Boolean,
         )
-    from_dict_field: fqr.Field[str] = {
+    from_dict_field: fqr.Field[lib.t.Optional[str]] = {
         'default': 'asc',
         'enum': {'asc', 'desc'},
-        'nullable': False,
-        'required': False
+        'required': False,
+        'type': lib.t.Optional[str]
         }
     null_field: fqr.Field[fqr.core.typ.NoneType] = None
-    non_nullable_field: fqr.Field[str] = fqr.Field(
-        default='not_null',
-        type=str,
-        nullable=False,
-        )
+    non_nullable_field: fqr.Field[int] = fqr.Field(default=4, type=int)
     required_field: fqr.Field[int]
     date_field: fqr.Field[lib.datetime.date] = (  # noqa: E731
         lambda: lib.datetime.datetime.now(lib.datetime.timezone.utc).date()
@@ -57,9 +53,10 @@ class DubDeriv(Derivative):
 
     test_again: fqr.Field[bool] = True
     bob: fqr.Field[str] = 'Dan'
-    other_field: fqr.Field[str] = fqr.Field(
+    other_field: fqr.Field[lib.t.Optional[str]] = fqr.Field(
         default='Paul',
-        enum=['Paul']
+        enum=['Paul'],
+        type_=lib.t.Optional[str]
         )
 
     def do_stuff(self):
@@ -70,9 +67,10 @@ class MixinDeriv(fqr.Object):
 
     test_again: fqr.Field[bool] = True
     bob: fqr.Field[str] = 'David'
-    other_field: fqr.Field[str] = fqr.Field(
+    other_field: fqr.Field[lib.t.Optional[str]] = fqr.Field(
         default='Albert',
-        enum=['Albert']
+        enum=['Albert'],
+        type_=lib.t.Optional[str]
         )
 
     def do_stuff(self):

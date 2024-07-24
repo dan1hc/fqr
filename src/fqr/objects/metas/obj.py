@@ -24,7 +24,7 @@ class Constants(cfg.Constants):
 class Meta(type):
     """Base class constructor."""
 
-    if lib.t.TYPE_CHECKING:
+    if lib.t.TYPE_CHECKING:  # pragma: no cover
         __annotations__: typ.SnakeDict
         __dict__: dict[typ.AnyString, lib.t.Any]
         __dataclass_fields__: lib.t.ClassVar[typ.DataClassFields]
@@ -50,11 +50,11 @@ class Meta(type):
         if (
             isinstance(_slots, str)
             and core.strings.utl.is_snake_case_string(_slots)
-            ):
+            ):  # pragma: no cover
             slots = [_slots] if _slots != Constants.CLASS_AS_DICT else []
         elif core.strings.utl.is_snake_case_iterable(_slots):
             slots = [s for s in _slots if s != Constants.CLASS_AS_DICT]
-        else:
+        else:  # pragma: no cover
             slots = []
         module: str = __namespace.get(Constants.__MODULE__, '')
         annotations: typ.SnakeDict
@@ -158,9 +158,10 @@ class Meta(type):
         namespace[Constants.ENUMERATIONS] = (
             utl.get_enumerations_from_fields(fields)
             )
-        namespace[Constants.HASH_FIELDS] = (
-            utl.get_fields_for_hash(__name, annotations)
-            )
+        if module != Constants.FIELDS_MODULE:
+            namespace[Constants.HASH_FIELDS] = utl.get_fields_for_hash(fields)
+        else:
+            namespace[Constants.HASH_FIELDS] = ('name', )
 
         return super().__new__(
             mcs,
@@ -239,6 +240,12 @@ class Meta(type):
         """Return `True` if `__key` is a field for class."""
 
         return bool(core.strings.utl.cname_for(__key, cls.fields))
+
+    def __iter__(cls) -> lib.t.Iterator[typ.string[typ.snake_case]]:
+        """Iterate over field names."""
+
+        for fname in cls.fields:
+            yield fname
 
     def __instancecheck__(cls, __instance: lib.t.Any) -> bool:
         """Instance check that considers slotted heritage."""

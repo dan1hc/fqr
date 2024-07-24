@@ -218,7 +218,14 @@ def parse(
         else:
             return try_decode(value, tp)
     elif typ.utl.check.is_typed(tp):
-        tp_annotations = typ.utl.hint.collect_annotations(tp)
+        if typ.utl.check.is_object(tp):
+            tp_annotations = {
+                k: typ.utl.check.get_args(v)[0]  # Expand Field[Any] --> Any
+                for k, v
+                in typ.utl.hint.collect_annotations(tp).items()
+                }
+        else:
+            tp_annotations = typ.utl.hint.collect_annotations(tp)
         if typ.utl.check.is_serialized_mapping(value):
             tp_dict: dict[str, lib.t.Any] = {}
             for k, val in value.items():

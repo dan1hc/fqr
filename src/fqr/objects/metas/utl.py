@@ -127,13 +127,13 @@ def parse_new_namespace(
                 )
             ):
             dtype = __annotations.get(name)
+        elif not is_snake_case:
+            raise exc.IncorrectCasingError(tuple(__namespace))
         else:
             raise exc.ReservedKeywordError(name)
 
         if typ.utl.check.is_wrapper_type(dtype):
             continue
-        elif not is_snake_case:
-            raise exc.IncorrectCasingError(tuple(__namespace))
         elif (
             (is_field := typ.utl.check.is_field(default))
             and typ.utl.check.is_field_type(dtype)

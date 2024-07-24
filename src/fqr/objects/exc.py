@@ -310,10 +310,9 @@ class TypeValidationError(
         super().__init__(
             ' '.join(
                 (
+                    error_ref.value,
                     f"Field: '{name}',",
-                    f"only supports type: '{dtype!s}',",
-                    'Value supplied was not parsed successfully.\n',
-                    f'REASON: {error_ref.value}'
+                    f"only supports type: '{dtype!s}',"
                     )
                 ),
             *(name, dtype, error_ref)

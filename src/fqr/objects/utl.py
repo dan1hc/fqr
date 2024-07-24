@@ -15,8 +15,6 @@ from . import typ
 class Constants(cfg.Constants):
     """Constant values specific to this file."""
 
-    CACHED_HASH_FIELDS: dict[str, tuple[typ.string[typ.snake_case], ...]] = {}
-
 
 @lib.functools.cache
 def is_public_field(f: str) -> bool:
@@ -60,18 +58,17 @@ def get_enumerations_from_fields(
             k in d
             and isinstance(
                 None,
-                typ.utl.check.get_checkable_types(field)
+                typ.utl.check.get_checkable_types(field.type_)
                 )
             and None not in d[k]
             ):
-            d[k] = (*d[k], None)  # type: ignore[arg-type]
+            d[k] = (*d[k], None)
 
     return d
 
 
 def get_fields_for_hash(
-    __name: str,
-    __annotations: typ.SnakeDict
+    __fields: typ.DataClassFields
     ) -> tuple[typ.string[typ.snake_case], ...]:
     """
     Filter to set of minimum fields required to compute a unique hash \
@@ -98,19 +95,19 @@ def get_fields_for_hash(
 
     """
 
-    if __name in Constants.CACHED_HASH_FIELDS:
-        return Constants.CACHED_HASH_FIELDS[__name]
-
     id_fields: list[typ.string[typ.snake_case]] = []
     name_fields: list[typ.string[typ.snake_case]] = []
     primitive_fields: list[typ.string[typ.snake_case]] = []
 
-    for f, tp in __annotations.items():
-        if not all(
-            typ.utl.check.is_primitive(sub_tp)
-            for sub_tp
-            in typ.utl.check.get_checkable_types(tp)
-            ):
+    for f, field in __fields.items():
+        if (
+            isinstance(field.type_, (lib.t.ForwardRef, str))
+            or not all(
+                typ.utl.check.is_primitive(sub_tp)
+                for sub_tp
+                in typ.utl.check.get_checkable_types(field)
+                )
+            ):  # pragma: no cover
             continue
         elif (s := f.strip('_').lower()).endswith('id'):
             id_fields.append(f)
@@ -128,8 +125,6 @@ def get_fields_for_hash(
     elif primitive_fields:
         fields_for_hash = tuple(primitive_fields)
     else:
-        fields_for_hash = tuple(__annotations)
-
-    Constants.CACHED_HASH_FIELDS[__name] = fields_for_hash
+        fields_for_hash = tuple(__fields)
 
     return fields_for_hash

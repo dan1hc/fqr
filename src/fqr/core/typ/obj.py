@@ -92,7 +92,6 @@ class SupportsAnnotations(lib.t.Protocol):
 
     __annotations__: dict[str, lib.t.Any]
     __bases__: tuple[type, ...]
-    __name__: str
 
     def __init__(self, *args: lib.t.Any, **kwargs: lib.t.Any) -> None: ...
 
@@ -123,6 +122,7 @@ class ObjectLike(lib.t.Protocol):
     """Object protocol."""
 
     __annotations__: 'typ.SnakeDict'
+    __bases__: tuple[type, ...]
     __dataclass_fields__: 'lib.t.ClassVar[typ.DataClassFields]'
 
     def __contains__(self, __key: lib.t.Any, /) -> bool: ...
@@ -135,7 +135,7 @@ class ObjectLike(lib.t.Protocol):
         __value: lib.t.Any
         ) -> lib.t.Optional[lib.Never]: ...
 
-    def __ior__(self, other: 'ObjectLike', /) -> None: ...
+    def __ior__(self, other: 'ObjectLike', /) -> lib.Self: ...
 
     def get(
         self,

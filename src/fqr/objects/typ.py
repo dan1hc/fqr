@@ -38,7 +38,7 @@ class Field(lib.types.GenericAlias, lib.t.Generic[AnyTypeCo]):
         return super().__new__(cls, origin, args)
 
     def __repr__(self) -> str:
-        ftypes = lib.t.get_args(self)
+        ftypes = utl.check.expand_types(self)
         _delim = (
             ' | '
             if core.typ.utl.check.is_union(self)

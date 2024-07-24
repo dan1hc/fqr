@@ -31,6 +31,7 @@ __all__ = (
     'Object',
     'ObjectType',
     'OptionalAnyDict',
+    'OptionalGenericAlias',
     'PackageExceptionType',
     'Primitive',
     'Serial',
@@ -63,6 +64,7 @@ if lib.t.TYPE_CHECKING:  # pragma: no cover
 
 AnyOrForwardRef = lib.t.ForwardRef | lib.t.Any
 StrOrForwardRef = lib.t.ForwardRef | str
+OptionalGenericAlias = type(lib.t.Optional[str])
 UnionGenericAlias = type(int | str)
 Wrapper = obj.SupportsParams[lib.Unpack[ArgsType]]
 

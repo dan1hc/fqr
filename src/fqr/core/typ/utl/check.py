@@ -220,7 +220,14 @@ def is_union(
 
     from .. import typ
 
-    return isinstance(obj, (typ.UnionGenericAlias, lib.types.UnionType))
+    return isinstance(
+        obj,
+        (
+            typ.OptionalGenericAlias,
+            typ.UnionGenericAlias,
+            lib.types.UnionType
+            )
+        )
 
 
 @lib.t.overload
