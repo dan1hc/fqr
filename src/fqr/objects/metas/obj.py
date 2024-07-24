@@ -185,6 +185,11 @@ class Meta(type):
             )
         if (field := __fields.get(__name)):
             return field
+        elif __name == 'class_as_dict':  # pragma: no cover
+            # This clause exists to address sphinx-doc error
+            # where sphinx thinks this attribute is otherwise
+            # more available / heritable than it really is.
+            return {}
         else:
             return super().__getattribute__(__name)
 

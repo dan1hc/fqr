@@ -908,7 +908,9 @@ class Object(ObjectBase):
 
     """
 
-    class_as_dict: lib.t.Optional[dict[typ.string[typ.snake_case], lib.t.Any]] = None
+    class_as_dict: lib.t.Final[
+        lib.t.Optional[dict[typ.string[typ.snake_case], lib.t.Any]]
+        ] = None
     """
     Instantiate class directly from passed `dict` (assumed to be \
     version of class in `dict` form).
