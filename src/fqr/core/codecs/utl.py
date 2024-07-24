@@ -1,17 +1,50 @@
 """Codecs utility functions."""
 
 __all__ = (
+    'encode',
     'parse',
+    'serialize',
     'try_decode',
     'try_parse_json',
     )
 
 from .. import strings
-from .. import typings
 
+from . import cfg
 from . import enm
 from . import lib
 from . import typ
+
+
+class Constants(cfg.Constants):
+    """Constant values specific to this file."""
+
+
+def serialize(value: lib.t.Any) -> str:
+    """Convert value to string."""
+
+    return lib.json.dumps(
+        value,
+        indent=Constants.INDENT,
+        sort_keys=True,
+        default=strings.utl.convert_for_repr
+        )
+
+
+def encode(value: lib.t.Any) -> typ.Serial:
+    """
+    JSON encode `value` using a corresponding encoder, otherwise returns \
+    `repr(value)`."""
+
+    if (encoder := Constants.ENCODERS.get(value.__class__)) is not None:
+        return encoder(value)
+
+    for _base in reversed(value.__class__.__bases__):
+        for __base in reversed(_base.__mro__):
+            if (encoder := Constants.ENCODERS.get(__base)) is not None:
+                return encoder(value)
+
+    return repr(value)
 
 
 def try_decode(
@@ -24,8 +57,8 @@ def try_decode(
     """
 
     try:
-        if typings.utl.check.is_literal(tp):
-            literals = typings.utl.check.get_args(tp)
+        if typ.utl.check.is_literal(tp):
+            literals = typ.utl.check.get_args(tp)
             literal: typ.AnyType
             if value in literals:
                 literal = value
@@ -36,11 +69,11 @@ def try_decode(
                 if literal in literals:
                     return literal
             return enm.ParseErrorRef.literal_decode
-        elif isinstance(value, typings.utl.check.get_checkable_types(tp)):
+        elif isinstance(value, typ.utl.check.get_checkable_types(tp)):
             tp_value: typ.AnyType = value
             return tp_value
         elif isinstance(value, str):
-            if typings.utl.check.is_bool_type(tp):
+            if typ.utl.check.is_bool_type(tp):
                 if value.lower() in enm.Boolean._member_names_:
                     boolean: typ.AnyType = (
                         value.lower() == enm.Boolean.true.name
@@ -48,15 +81,15 @@ def try_decode(
                     return boolean
                 else:
                     return enm.ParseErrorRef.bool_decode
-            elif typings.utl.check.is_number_type(tp):
+            elif typ.utl.check.is_number_type(tp):
                 if strings.utl.is_valid_number_str(value):
                     num_value: typ.AnyType = tp(value)  # type: ignore[call-arg]
                     return num_value
                 else:
                     return enm.ParseErrorRef.number_decode
             elif (
-                (is_datetime_tp := typings.utl.check.is_datetime_type(tp))
-                or typings.utl.check.is_date_type(tp)
+                (is_datetime_tp := typ.utl.check.is_datetime_type(tp))
+                or typ.utl.check.is_date_type(tp)
                 ):
                 if strings.utl.is_valid_datetime_str(value):
                     dt = (
@@ -71,7 +104,7 @@ def try_decode(
                         return date_value
                 else:
                     return enm.ParseErrorRef.datetime_decode
-            elif typings.utl.check.is_none_type(tp):
+            elif typ.utl.check.is_none_type(tp):
                 if value.lower() in enm.NoneAlias._member_names_:
                     none: typ.AnyType = None
                     return none
@@ -104,23 +137,23 @@ def try_parse_json(
 @lib.t.overload
 def parse(
     value: lib.t.Any,
-    tp: type[typings.typ.VariadicArrayType],
-    ) -> typings.typ.VariadicArrayType | enm.ParseErrorRef: ...
+    tp: type[typ.VariadicArrayType],
+    ) -> typ.VariadicArrayType | enm.ParseErrorRef: ...
 @lib.t.overload
 def parse(
     value: lib.t.Any,
-    tp: type[typings.typ.ArrayType],
-    ) -> typings.typ.ArrayType | enm.ParseErrorRef: ...
+    tp: type[typ.ArrayType],
+    ) -> typ.ArrayType | enm.ParseErrorRef: ...
 @lib.t.overload
 def parse(
     value: lib.t.Any,
-    tp: type[typings.typ.MappingType],
-    ) -> typings.typ.MappingType | enm.ParseErrorRef: ...
+    tp: type[typ.MappingType],
+    ) -> typ.MappingType | enm.ParseErrorRef: ...
 @lib.t.overload
 def parse(
     value: lib.t.Any,
-    tp: type[typings.typ.Typed],
-    ) -> typings.typ.Typed | enm.ParseErrorRef: ...
+    tp: type[typ.Typed],
+    ) -> typ.Typed | enm.ParseErrorRef: ...
 @lib.t.overload
 def parse(
     value: lib.t.Any,
@@ -129,17 +162,17 @@ def parse(
 def parse(
     value: typ.AnyType,
     tp: (
-        type[typings.typ.VariadicArrayType]
-        | type[typings.typ.ArrayType]
-        | type[typings.typ.MappingType]
-        | type[typings.typ.Typed]
+        type[typ.VariadicArrayType]
+        | type[typ.ArrayType]
+        | type[typ.MappingType]
+        | type[typ.Typed]
         | type[typ.AnyType]
         ),
     ) -> (
-        typings.typ.VariadicArrayType
-        | typings.typ.ArrayType
-        | typings.typ.MappingType
-        | typings.typ.Typed
+        typ.VariadicArrayType
+        | typ.ArrayType
+        | typ.MappingType
+        | typ.Typed
         | typ.AnyType
         | enm.ParseErrorRef
         ):
@@ -157,7 +190,7 @@ def parse(
 
     """
 
-    valid_types = typings.utl.check.expand_types(tp)
+    valid_types = typ.utl.check.expand_types(tp)
     if len(valid_types) > 1:
         parsed_value_or_err_ref = parse(value, valid_types[0])
         for dtype_candidate in valid_types[1:]:
@@ -168,15 +201,15 @@ def parse(
         return parsed_value_or_err_ref
     elif isinstance(value, str):
         if (
-            typings.utl.check.is_array_type(tp)
-            or typings.utl.check.is_variadic_array_type(tp)
+            typ.utl.check.is_array_type(tp)
+            or typ.utl.check.is_variadic_array_type(tp)
             ):
             deserialized_as_list = try_parse_json(value)
             if not isinstance(deserialized_as_list, enm.ParseErrorRef):
                 return parse(deserialized_as_list, tp)
             else:
                 return deserialized_as_list
-        elif typings.utl.check.is_mapping_type(tp):
+        elif typ.utl.check.is_mapping_type(tp):
             deserialized_as_dict = try_parse_json(value)
             if not isinstance(deserialized_as_dict, enm.ParseErrorRef):
                 return parse(deserialized_as_dict, tp)
@@ -184,14 +217,26 @@ def parse(
                 return deserialized_as_dict
         else:
             return try_decode(value, tp)
-    elif typings.utl.check.is_typed(tp):
-        tp_annotations = typings.utl.hint.collect_annotations(tp)
-        if typings.utl.check.is_serialized_mapping(value):
+    elif typ.utl.check.is_typed(tp):
+        if typ.utl.check.is_object(tp):
+            tp_annotations = {
+                k: typ.utl.check.get_args(v)[0]  # Expand Field[Any] --> Any
+                for k, v
+                in typ.utl.hint.collect_annotations(tp).items()
+                }
+        else:
+            tp_annotations = typ.utl.hint.collect_annotations(tp)
+        if typ.utl.check.is_serialized_mapping(value):
             tp_dict: dict[str, lib.t.Any] = {}
             for k, val in value.items():
                 if (
                     isinstance(k, str)
-                    and (ckey := strings.utl.cname_for(k, tp_annotations))
+                    and (
+                        ckey := strings.utl.cname_for(
+                            k,
+                            tuple(tp_annotations)
+                            )
+                        )
                     ):
                     tp_val = parse(val, tp_annotations[ckey])
                     if isinstance(tp_val, enm.ParseErrorRef):
@@ -202,11 +247,11 @@ def parse(
             return tp(**tp_dict)
         else:  # pragma: no cover
             return try_decode(value, tp)
-    elif (generics := typings.utl.check.get_type_args(tp)):
-        if (typings.utl.check.is_variadic_array_type(tp)):
-            if not typings.utl.check.is_array(value):
+    elif (generics := typ.utl.check.get_type_args(tp)):
+        if (typ.utl.check.is_variadic_array_type(tp)):
+            if not typ.utl.check.is_array(value):
                 return enm.ParseErrorRef.value_decode
-            elif typings.utl.check.is_ellipsis(generics[-1]):
+            elif typ.utl.check.is_ellipsis(generics[-1]):
                 parsed_variadic_unknown_len = [
                     parse(v, generics[0])
                     for v
@@ -217,7 +262,7 @@ def parse(
                         isinstance(p, enm.ParseErrorRef)
                         or not isinstance(
                             p,
-                            typings.utl.check.get_checkable_types(generics[0])
+                            typ.utl.check.get_checkable_types(generics[0])
                             )
                         )
                     for p
@@ -237,7 +282,7 @@ def parse(
                         isinstance(p, enm.ParseErrorRef)
                         or not isinstance(
                             p,
-                            typings.utl.check.get_checkable_types(generics[i])
+                            typ.utl.check.get_checkable_types(generics[i])
                             )
                         )
                     for i, p
@@ -248,8 +293,8 @@ def parse(
                     return try_decode(parsed_variadic_known_len, tp)
             else:
                 return enm.ParseErrorRef.invalid_arr_len
-        elif typings.utl.check.is_array_type(tp):
-            if typings.utl.check.is_array(value):
+        elif typ.utl.check.is_array_type(tp):
+            if typ.utl.check.is_array(value):
                 parsed_array = [
                     parse(v, generics[0])
                     for v
@@ -260,7 +305,7 @@ def parse(
                         isinstance(p, enm.ParseErrorRef)
                         or not isinstance(
                             p,
-                            typings.utl.check.get_checkable_types(generics[0])
+                            typ.utl.check.get_checkable_types(generics[0])
                             )
                         )
                     for p
@@ -271,10 +316,10 @@ def parse(
                     return try_decode(parsed_array, tp)
             else:
                 return try_decode(value, tp)
-        elif typings.utl.check.is_mapping_type(tp):
+        elif typ.utl.check.is_mapping_type(tp):
             if (
-                typings.utl.check.is_serialized_mapping(value)
-                or typings.utl.check.is_mapping(value)
+                typ.utl.check.is_serialized_mapping(value)
+                or typ.utl.check.is_mapping(value)
                 ):
                 if len(generics) == 2:
                     key_type, value_type = generics

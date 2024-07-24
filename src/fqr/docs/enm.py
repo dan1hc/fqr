@@ -1,10 +1,15 @@
 """Docs enumerations."""
 
+from .. import core
+
 __all__ = (
     'NoCrawlPath',
     'SiteMapChangeFreq',
     'SupportedTheme',
+    *core.enm.__all__
     )
+
+from .. core . enm import *
 
 from . import lib
 

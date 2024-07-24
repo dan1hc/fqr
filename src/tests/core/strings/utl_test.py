@@ -4,10 +4,10 @@ import unittest
 
 import fqr
 
-from . import cns
+from . import cfg
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to unit tests in this file."""
 
     VALID_CAMEL_STRING_EXAMPLES = (
@@ -18,6 +18,10 @@ class Constants(cns.Constants):
         'upper_snake_case_string_100_sure_fift_337a_good',
         '_snake_case_string_'
         )
+    BIG_STR_DICT = {
+        'api-key': VALID_CAMEL_STRING_EXAMPLES[0] * 30,
+        'regular': VALID_SNAKE_STRING_EXAMPLES[0] * 30,
+        }
 
 
 class TestUtils(unittest.TestCase):
@@ -136,4 +140,51 @@ class TestUtils(unittest.TestCase):
                 Constants.VALID_SNAKE_STRING_EXAMPLES[0],
                 fqr.core.strings.enm.SupportedCasing.snake_case.value
                 )
+            )
+
+    def test_12_field_serialization(self):
+        """Test field serialization."""
+
+        field = fqr.Field(name='test', default='testing', type_=str)
+        self.assertEqual(
+            repr(fqr.objects.typ.Field(field, field.type_)),
+            fqr.core.strings.utl.convert_for_repr(field)
+            )
+
+    def test_13_fn_serialization(self):
+        """Test fn serialization."""
+
+        def fn() -> str:
+            return 'str'
+
+        self.assertEqual(
+            fqr.core.strings.utl.convert_for_repr(
+                fn.__annotations__['return'],
+                ),
+            fqr.core.strings.utl.convert_for_repr(fn)
+            )
+
+    def test_14_big_str_redaction(self):
+        """Test big_str redaction."""
+
+        self.assertEqual(
+            fqr.core.strings.utl.convert_for_repr(
+                Constants.BIG_STR_DICT,
+                )['api-key'],
+            fqr.core.strings.utl.redact_key_value_pair('api-key', 'anything')
+            )
+
+    def test_15_big_str_serialization(self):
+        """Test big_str serialization."""
+
+        self.assertEqual(
+            fqr.core.strings.utl.convert_for_repr(
+                Constants.BIG_STR_DICT['regular']
+                ),
+            [
+                Constants.M_LINE_TOKEN,
+                *fqr.core.strings.obj.StringWrapper.wrap(
+                    Constants.BIG_STR_DICT['regular']
+                    )
+                ]
             )

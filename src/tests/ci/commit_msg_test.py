@@ -3,10 +3,10 @@
 import unittest
 import re
 
-from . import cns
+from . import cfg
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Module specific constant values."""
 
     ValidMsgPattern = re.compile(

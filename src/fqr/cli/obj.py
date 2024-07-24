@@ -7,11 +7,11 @@ __all__ = (
 
 from .. import __version__
 
-from . import cns
+from . import cfg
 from . import lib
 
 
-class Constants(cns.Constants):
+class Constants(cfg.Constants):
     """Constant values specific to CLI objs."""
 
 

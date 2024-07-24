@@ -7,7 +7,7 @@ import fqr
 from fqr . core import codecs
 from fqr . core import lib
 
-from . import cns
+from . import cfg
 
 
 class SimpleTypedObj(lib.t.TypedDict):
@@ -17,7 +17,15 @@ class SimpleTypedObj(lib.t.TypedDict):
     id_: int
 
 
-class Constants(cns.Constants):
+class SubDecimal(lib.decimal.Decimal):
+    """Decimal subclass for testing."""
+
+
+class UnknownSerializable:
+    """Class for testing with no known serialization."""
+
+
+class Constants(cfg.Constants):
     """Constant values specific to unit tests in this file."""
 
     SimpleDict: dict[str, tuple[int, ...]] = {
@@ -438,4 +446,18 @@ class TestUtils(unittest.TestCase):
                 codecs.lib.json.dumps(SimpleTypedObj(not_a_key='test')),
                 SimpleTypedObj
                 )
+            )
+
+    def test_40_encode_subclass(self):
+        """Test `encode` on `SubDecimal(Decimal)`."""
+
+        value = SubDecimal(0.1)
+        self.assertEqual(float(value), codecs.utl.encode(value))
+
+    def test_41_encode_unknown(self):
+        """Test `encode` on `UnknownSerializable`."""
+
+        self.assertEqual(
+            repr(UnknownSerializable),
+            codecs.utl.encode(UnknownSerializable)
             )

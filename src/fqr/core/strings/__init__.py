@@ -1,7 +1,7 @@
 """Modules for handling strings."""
 
 __all__ = (
-    'cns',
+    'cfg',
     'enm',
     'exc',
     'lib',
@@ -10,7 +10,7 @@ __all__ = (
     'utl',
     )
 
-from . import cns
+from . import cfg
 from . import enm
 from . import exc
 from . import lib
