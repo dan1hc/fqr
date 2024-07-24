@@ -389,7 +389,8 @@ class ObjectBase(metaclass=metas.Meta):
         return dict(self)
 
     def __setstate__(self, state: typ.SnakeDict) -> None:
-        self.update(self.__class__(state))
+        other: typ.obj.ObjectLike = self.__class__(state)
+        self.update(other)
         return None
 
     def __ior__(self, other: typ.obj.ObjectLike, /) -> None:
