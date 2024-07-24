@@ -15,6 +15,7 @@ __all__ = (
     'InvalidObjectComparisonError',
     'MissingTypeAnnotation',
     'ReservedKeywordError',
+    'TypeValidationError',
     *core.exc.__all__
     )
 
@@ -28,9 +29,7 @@ class Constants(cfg.Constants):
     """Constant values specific to this file."""
 
 
-class InvalidFieldAdditionError(
-    BasePackageException[str],
-    ):
+class InvalidFieldAdditionError(BasePackageException[str]):
     """Cannot add new fields after a class has already been defined."""
 
     def __init__(self, name: str):
@@ -46,9 +45,7 @@ class InvalidFieldAdditionError(
             )
 
 
-class InvalidFieldRedefinitionError(
-    BasePackageException[str],
-    ):
+class InvalidFieldRedefinitionError(BasePackageException[str]):
     """Cannot redefine field for the same key with a different name."""
 
     def __init__(self, name: str):
@@ -64,9 +61,7 @@ class InvalidFieldRedefinitionError(
             )
 
 
-class IncorrectCasingError(
-    BasePackageException[lib.t.Iterable[str]],
-    ):
+class IncorrectCasingError(BasePackageException[lib.t.Iterable[str]]):
     """Incorrect field casing."""
 
     def __init__(self, fields: lib.t.Iterable[str]):
@@ -83,7 +78,7 @@ class IncorrectCasingError(
 
 
 class IncorrectDefaultTypeError(
-    BasePackageException[str, type[lib.t.Any], lib.t.Any],
+    BasePackageException[str, type[lib.t.Any], lib.t.Any]
     ):
     """
     Error raised when a field's default value is not of an allowed type.
@@ -110,7 +105,7 @@ class IncorrectDefaultTypeError(
 
 
 class IncorrectTypeError(
-    BasePackageException[str, lib.t.Any, lib.t.Any],
+    BasePackageException[str, lib.t.Any, lib.t.Any]
     ):
     """Error raised when a field value is not of an allowed type."""
 
@@ -134,7 +129,7 @@ class IncorrectTypeError(
 
 
 class InvalidComparisonTypeError(
-    BasePackageException[str, lib.t.Any, lib.t.Any],
+    BasePackageException[str, lib.t.Any, lib.t.Any]
     ):
     """
     Error raised when comparing a field with a value of a different \
@@ -162,7 +157,7 @@ class InvalidComparisonTypeError(
 
 
 class InvalidContainerComparisonTypeError(
-    BasePackageException[str, lib.t.Any, lib.t.Any],
+    BasePackageException[str, lib.t.Any, lib.t.Any]
     ):
     """
     Error raised when checking for membership or similarity against a \
@@ -189,9 +184,7 @@ class InvalidContainerComparisonTypeError(
             )
 
 
-class InvalidLogMessageTypeError(
-    BasePackageException[lib.t.Any],
-    ):
+class InvalidLogMessageTypeError(BasePackageException[lib.t.Any]):
     """
     Error raised when a log message of invalid data type is passed.
 
@@ -211,7 +204,7 @@ class InvalidLogMessageTypeError(
 
 
 class InvalidObjectComparisonError(
-    BasePackageException[lib.t.Any, lib.t.Any],
+    BasePackageException[lib.t.Any, lib.t.Any]
     ):
     """
     Error raised when comparing an object with another with differing \
@@ -241,7 +234,7 @@ class FieldAnnotationError(
     BasePackageException[
         str,
         lib.t.Optional[lib.t.Union[type[lib.t.Any], lib.t.ForwardRef]]
-        ],
+        ]
     ):
     """Incomplete type annotation."""
 
@@ -270,9 +263,7 @@ class FieldAnnotationError(
             )
 
 
-class MissingTypeAnnotation(
-    BasePackageException[str],
-    ):
+class MissingTypeAnnotation(BasePackageException[str]):
     """Incomplete type annotation."""
 
     def __init__(self, name: str):
@@ -287,9 +278,7 @@ class MissingTypeAnnotation(
             )
 
 
-class ReservedKeywordError(
-    BasePackageException[str],
-    ):
+class ReservedKeywordError(BasePackageException[str]):
     """Invalid keyword."""
 
     def __init__(self, name: str):
@@ -304,4 +293,28 @@ class ReservedKeywordError(
                     )
                 ),
             name
+            )
+
+
+class TypeValidationError(
+    BasePackageException[str, lib.t.Any, core.codecs.enm.ParseErrorRef]
+    ):
+    """Error raised when a field value could not be parsed as valid type."""
+
+    def __init__(
+        self,
+        name: str,
+        dtype: lib.t.Any,
+        error_ref: core.codecs.enm.ParseErrorRef
+        ) -> None:
+        super().__init__(
+            ' '.join(
+                (
+                    f"Field: '{name}',",
+                    f"only supports type: '{dtype!s}',",
+                    'Value supplied was not parsed successfully.\n',
+                    f'REASON: {error_ref.value}'
+                    )
+                ),
+            *(name, dtype, error_ref)
             )

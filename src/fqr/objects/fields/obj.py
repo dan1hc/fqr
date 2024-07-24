@@ -734,12 +734,8 @@ class Field(objs.Object, lib.t.Generic[typ.AnyType]):
 
         parsed = core.codecs.utl.parse(value, self.type_)
         if isinstance(parsed, core.codecs.enm.ParseErrorRef):
-            if validate_dtype: # TODO: TypeValidationError
-                raise exc.IncorrectTypeError(
-                    self.name,
-                    self.type_,
-                    value
-                    )
+            if validate_dtype:
+                raise exc.TypeValidationError(self.name, self.type_, parsed)
             else:
                 return None
         else:
