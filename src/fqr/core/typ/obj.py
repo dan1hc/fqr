@@ -216,20 +216,20 @@ class string(str, lib.t.Generic[StringType]):
         errors: str = ...
         ) -> lib.Self: ...
     @lib.t.overload  # type: ignore[no-overload-impl]
-    def capitalize(self: 'lib.LiteralString') -> 'lib.LiteralString': ...
+    def capitalize(self: lib.LiteralString) -> lib.LiteralString: ...
     @lib.t.overload
     def capitalize(self) -> 'string[StringType] | string[lib.t.Any]': ...  # type: ignore[misc]
     @lib.t.overload  # type: ignore[no-overload-impl]
-    def casefold(self: 'lib.LiteralString') -> 'lib.LiteralString': ...
+    def casefold(self: lib.LiteralString) -> lib.LiteralString: ...
     @lib.t.overload
     def casefold(self) -> 'string[StringType] | string[lib.t.Any]': ...  # type: ignore[misc]
     @lib.t.overload  # type: ignore[no-overload-impl]
     def center(
-        self: 'lib.LiteralString',
+        self: lib.LiteralString,
         width: lib.t.SupportsIndex,
-        fillchar: 'lib.LiteralString' = " ",
+        fillchar: lib.LiteralString = " ",
         /
-        ) -> 'lib.LiteralString': ...
+        ) -> lib.LiteralString: ...
     @lib.t.overload
     def center(  # type: ignore[misc]
         self,
@@ -239,9 +239,9 @@ class string(str, lib.t.Generic[StringType]):
         ) -> 'string[StringType] | string[lib.t.Any]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
     def expandtabs(
-        self: 'lib.LiteralString',
+        self: lib.LiteralString,
         tabsize: lib.t.SupportsIndex = 8
-        ) -> 'lib.LiteralString': ...
+        ) -> lib.LiteralString: ...
     @lib.t.overload
     def expandtabs(  # type: ignore[misc]
         self,
@@ -260,10 +260,10 @@ class string(str, lib.t.Generic[StringType]):
         ) -> 'string[StringType] | string[lib.t.Any]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
     def join(
-        self: 'lib.LiteralString',
-        iterable: 'lib.t.Iterable[lib.LiteralString]',
+        self: lib.LiteralString,
+        iterable: lib.t.Iterable[lib.LiteralString],
         /
-        ) -> 'lib.LiteralString': ...
+        ) -> lib.LiteralString: ...
     @lib.t.overload
     def join(  # type: ignore[misc]
         self,
@@ -278,11 +278,11 @@ class string(str, lib.t.Generic[StringType]):
         ) -> 'string[lib.t.Any]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
     def ljust(
-        self: 'lib.LiteralString',
+        self: lib.LiteralString,
         width: lib.t.SupportsIndex,
-        fillchar: 'lib.LiteralString' = " ",
+        fillchar: lib.LiteralString = " ",
         /
-        ) -> 'lib.LiteralString': ...
+        ) -> lib.LiteralString: ...
     @lib.t.overload
     def ljust(  # type: ignore[misc]
         self,
@@ -291,15 +291,15 @@ class string(str, lib.t.Generic[StringType]):
         /
         ) -> 'string[StringType] | string[lib.t.Any]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
-    def lower(self: 'lib.LiteralString') -> 'lib.LiteralString': ...
+    def lower(self: lib.LiteralString) -> lib.LiteralString: ...
     @lib.t.overload
     def lower(self) -> 'string[StringType] | string[lib.t.Any]': ...  # type: ignore[misc]
     @lib.t.overload  # type: ignore[no-overload-impl]
     def lstrip(
-        self: 'lib.LiteralString',
-        chars: 'lib.LiteralString | None' = None,
+        self: lib.LiteralString,
+        chars: lib.LiteralString | None = None,
         /
-        ) -> 'lib.LiteralString': ...
+        ) -> lib.LiteralString: ...
     @lib.t.overload
     def lstrip(  # type: ignore[misc]
         self,
@@ -308,13 +308,13 @@ class string(str, lib.t.Generic[StringType]):
         ) -> 'string[StringType] | string[lib.t.Any]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
     def partition(
-        self: 'lib.LiteralString',
-        sep: 'lib.LiteralString',
+        self: lib.LiteralString,
+        sep: lib.LiteralString,
         /
         ) -> tuple[
-            'lib.LiteralString',
-            'lib.LiteralString',
-            'lib.LiteralString'
+            lib.LiteralString,
+            lib.LiteralString,
+            lib.LiteralString
             ]: ...
     @lib.t.overload
     def partition(self, sep: str, /) -> tuple[  # type: ignore[misc]
@@ -325,12 +325,12 @@ class string(str, lib.t.Generic[StringType]):
     if lib.sys.version_info >= (3, 13):  # pragma: no cover
         @lib.t.overload  # type: ignore[no-overload-impl]
         def replace(
-            self: 'lib.LiteralString',
-            old: 'lib.LiteralString',
-            new: 'lib.LiteralString',
+            self: lib.LiteralString,
+            old: lib.LiteralString,
+            new: lib.LiteralString,
             /,
             count: lib.t.SupportsIndex = -1
-        ) -> 'lib.LiteralString': ...
+        ) -> lib.LiteralString: ...
         @lib.t.overload
         def replace(  # type: ignore[misc]
             self,
@@ -342,12 +342,12 @@ class string(str, lib.t.Generic[StringType]):
     else:  # pragma: no cover
         @lib.t.overload  # type: ignore[no-redef, no-overload-impl]
         def replace(
-            self: 'lib.LiteralString',
-            old: 'lib.LiteralString',
-            new: 'lib.LiteralString',
+            self: lib.LiteralString,
+            old: lib.LiteralString,
+            new: lib.LiteralString,
             count: lib.t.SupportsIndex = -1,
             /
-        ) -> 'lib.LiteralString': ...
+        ) -> lib.LiteralString: ...
         @lib.t.overload
         def replace(  # type: ignore[misc]
             self,
@@ -359,10 +359,10 @@ class string(str, lib.t.Generic[StringType]):
     if lib.sys.version_info >= (3, 9):
         @lib.t.overload  # type: ignore[no-overload-impl]
         def removeprefix(
-            self: 'lib.LiteralString',
-            prefix: 'lib.LiteralString',
+            self: lib.LiteralString,
+            prefix: lib.LiteralString,
             /
-            ) -> 'lib.LiteralString': ...
+            ) -> lib.LiteralString: ...
         @lib.t.overload
         def removeprefix(  # type: ignore[misc]
             self,
@@ -371,10 +371,10 @@ class string(str, lib.t.Generic[StringType]):
             ) -> 'string[StringType] | string[lib.t.Any]': ...
         @lib.t.overload  # type: ignore[no-overload-impl]
         def removesuffix(
-            self: 'lib.LiteralString',
-            suffix: 'lib.LiteralString',
+            self: lib.LiteralString,
+            suffix: lib.LiteralString,
             /
-            ) -> 'lib.LiteralString': ...
+            ) -> lib.LiteralString: ...
         @lib.t.overload
         def removesuffix(  # type: ignore[misc]
             self,
@@ -384,11 +384,11 @@ class string(str, lib.t.Generic[StringType]):
 
     @lib.t.overload  # type: ignore[no-overload-impl]
     def rjust(
-        self: 'lib.LiteralString',
+        self: lib.LiteralString,
         width: lib.t.SupportsIndex,
-        fillchar: 'lib.LiteralString' = " ",
+        fillchar: lib.LiteralString = " ",
         /
-        ) -> 'lib.LiteralString': ...
+        ) -> lib.LiteralString: ...
     @lib.t.overload
     def rjust(  # type: ignore[misc]
         self,
@@ -398,13 +398,13 @@ class string(str, lib.t.Generic[StringType]):
         ) -> 'string[StringType] | string[lib.t.Any]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
     def rpartition(
-        self: 'lib.LiteralString',
-        sep: 'lib.LiteralString',
+        self: lib.LiteralString,
+        sep: lib.LiteralString,
         /
         ) -> tuple[
-            'lib.LiteralString',
-            'lib.LiteralString',
-            'lib.LiteralString'
+            lib.LiteralString,
+            lib.LiteralString,
+            lib.LiteralString
             ]: ...
     @lib.t.overload
     def rpartition(  # type: ignore[misc]
@@ -418,10 +418,10 @@ class string(str, lib.t.Generic[StringType]):
             ]: ...
     @lib.t.overload  # type: ignore[no-overload-impl]
     def rsplit(
-        self: 'lib.LiteralString',
-        sep: 'lib.LiteralString | None' = None,
+        self: lib.LiteralString,
+        sep: lib.LiteralString | None = None,
         maxsplit: lib.t.SupportsIndex = -1
-        ) -> 'list[lib.LiteralString]': ...
+        ) -> list[lib.LiteralString]: ...
     @lib.t.overload
     def rsplit(  # type: ignore[misc]
         self,
@@ -430,10 +430,10 @@ class string(str, lib.t.Generic[StringType]):
         ) -> 'list[string[StringType] | string[lib.t.Any]]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
     def rstrip(
-        self: 'lib.LiteralString',
-        chars: 'lib.LiteralString | None' = None,
+        self: lib.LiteralString,
+        chars: lib.LiteralString | None = None,
         /
-        ) -> 'lib.LiteralString': ...
+        ) -> lib.LiteralString: ...
     @lib.t.overload
     def rstrip(  # type: ignore[misc]
         self,
@@ -442,10 +442,10 @@ class string(str, lib.t.Generic[StringType]):
         ) -> 'string[StringType] | string[lib.t.Any]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
     def split(
-        self: 'lib.LiteralString',
-        sep: 'lib.LiteralString | None' = None,
+        self: lib.LiteralString,
+        sep: lib.LiteralString | None = None,
         maxsplit: lib.t.SupportsIndex = -1
-        ) -> 'list[lib.LiteralString]': ...
+        ) -> list[lib.LiteralString]: ...
     @lib.t.overload
     def split(  # type: ignore[misc]
         self,
@@ -454,9 +454,9 @@ class string(str, lib.t.Generic[StringType]):
         ) -> 'list[string[StringType] | string[lib.t.Any]]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
     def splitlines(
-        self: 'lib.LiteralString',
+        self: lib.LiteralString,
         keepends: bool = False
-        ) -> 'list[lib.LiteralString]': ...
+        ) -> list[lib.LiteralString]: ...
     @lib.t.overload
     def splitlines(  # type: ignore[misc]
         self,
@@ -464,10 +464,10 @@ class string(str, lib.t.Generic[StringType]):
         ) -> 'list[string[StringType] | string[lib.t.Any]]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
     def strip(
-        self: 'lib.LiteralString',
-        chars: 'lib.LiteralString | None' = None,
+        self: lib.LiteralString,
+        chars: lib.LiteralString | None = None,
         /
-        ) -> 'lib.LiteralString': ...
+        ) -> lib.LiteralString: ...
     @lib.t.overload
     def strip(  # type: ignore[misc]
         self,
@@ -475,11 +475,11 @@ class string(str, lib.t.Generic[StringType]):
         /
         ) -> 'string[StringType] | string[lib.t.Any]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
-    def swapcase(self: 'lib.LiteralString') -> 'lib.LiteralString': ...
+    def swapcase(self: lib.LiteralString) -> lib.LiteralString: ...
     @lib.t.overload
     def swapcase(self) -> 'string[StringType] | string[lib.t.Any]': ...  # type: ignore[misc]
     @lib.t.overload  # type: ignore[no-overload-impl]
-    def title(self: 'lib.LiteralString') -> 'lib.LiteralString': ...
+    def title(self: lib.LiteralString) -> lib.LiteralString: ...
     @lib.t.overload
     def title(self) -> 'string[StringType] | string[lib.t.Any]': ...  # type: ignore[misc]
     def translate(  # type: ignore[empty-body]
@@ -488,7 +488,7 @@ class string(str, lib.t.Generic[StringType]):
         /
         ) -> 'string[StringType] | string[lib.t.Any]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
-    def upper(self: 'lib.LiteralString') -> 'lib.LiteralString': ...
+    def upper(self: lib.LiteralString) -> lib.LiteralString: ...
     @lib.t.overload
     def upper(self) -> 'string[StringType] | string[lib.t.Any]': ...  # type: ignore[misc]
     @lib.t.overload  # type: ignore[misc, no-overload-impl]
@@ -510,7 +510,7 @@ class string(str, lib.t.Generic[StringType]):
         ) -> 'string[StringType] | string[lib.t.Any]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
     def __iter__(
-        self: 'lib.LiteralString'
+        self: lib.LiteralString
         ) -> 'lib.t.Iterator[lib.LiteralString]': ...
     @lib.t.overload
     def __iter__(  # type: ignore[misc]
@@ -518,13 +518,13 @@ class string(str, lib.t.Generic[StringType]):
         ) -> 'lib.t.Iterator[string[StringType] | string[lib.t.Any]]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
     def __mod__(
-        self: 'lib.LiteralString',
+        self: lib.LiteralString,
         value: lib.t.Union[
-            'lib.LiteralString',
-            'tuple[lib.LiteralString, ...]'
+            lib.LiteralString,
+            tuple[lib.LiteralString, ...]
             ],
         /
-        ) -> 'lib.LiteralString': ...
+        ) -> lib.LiteralString: ...
     @lib.t.overload
     def __mod__(
         self,
@@ -533,10 +533,10 @@ class string(str, lib.t.Generic[StringType]):
         ) -> 'string[StringType] | string[lib.t.Any]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
     def __mul__(
-        self: 'lib.LiteralString',
+        self: lib.LiteralString,
         value: lib.t.SupportsIndex,
         /
-        ) -> 'lib.LiteralString': ...
+        ) -> lib.LiteralString: ...
     @lib.t.overload
     def __mul__(  # type: ignore[misc]
         self,
@@ -545,10 +545,10 @@ class string(str, lib.t.Generic[StringType]):
         ) -> 'string[StringType] | string[lib.t.Any]': ...
     @lib.t.overload  # type: ignore[no-overload-impl]
     def __rmul__(
-        self: 'lib.LiteralString',
+        self: lib.LiteralString,
         value: lib.t.SupportsIndex,
         /
-        ) -> 'lib.LiteralString': ...
+        ) -> lib.LiteralString: ...
     @lib.t.overload
     def __rmul__(  # type: ignore[misc]
         self,
