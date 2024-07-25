@@ -24,7 +24,7 @@ keywords = [
     "swagger",
     ]
 readme = "README.md"
-version = "0.5.1"
+version = "0.6.0-rc.2"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
@@ -83,7 +83,9 @@ addopts = "--cov=fqr --cov-report=term-missing -p no:warnings -x"
 testpaths = ["src/tests"]
 
 [tool.mypy]
-exclude = ["tests"]
+exclude = [
+    "tests",
+    ]
 files = ["./src/fqr"]
 pretty = true
 python_version = "3.12"

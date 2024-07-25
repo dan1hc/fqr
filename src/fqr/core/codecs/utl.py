@@ -83,8 +83,8 @@ def try_decode(
                     return enm.ParseErrorRef.bool_decode
             elif typ.utl.check.is_number_type(tp):
                 if strings.utl.is_valid_number_str(value):
-                    num_value: typ.AnyType = tp(value)  # type: ignore[call-arg]
-                    return num_value
+                    num_tp: type[typ.AnyType] = tp
+                    return num_tp(value)  # type: ignore[call-arg]
                 else:
                     return enm.ParseErrorRef.number_decode
             elif (
