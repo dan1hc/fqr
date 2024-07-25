@@ -1,5 +1,27 @@
 # CHANGELOG
 
+## v0.7.0 (2024-07-25)
+
+### Feature
+
+* feat: __logger__ (#26)
+
+* feat: __logger__
+
+Implements package logger, as specified in readme.
+
+closes #21
+
+* fix: __310_support__
+
+* fix: __more_310_support__
+
+* docs: __v0.7.0-rc.1__
+
+---------
+
+Co-authored-by: github-actions &lt;action@github.com&gt; ([`e1b6612`](https://github.com/dan1hc/fqr/commit/e1b6612b289ee9096a6109af8344dcddbfc5ed4f))
+
 ## v0.6.0 (2024-07-25)
 
 ### Feature
