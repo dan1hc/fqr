@@ -1,5 +1,37 @@
 # CHANGELOG
 
+## v0.6.0 (2024-07-25)
+
+### Feature
+
+* feat: __make_str_generic__ (#25)
+
+* feat: __make_str_generic__
+
+Makes `string[Any]` more robust.
+
+closes #22
+
+* fix: __class_as_dict_should_be_Final__
+
+* fix: __class_as_dict_should_be_Final__
+
+* fix: __properly_hint_string_generic__
+
+* fix: __properly_hint_string_generic_w_more_sys_support__
+
+* fix: __properly_hint_string_generic_w_more_version_support__
+
+* docs: __v0.6.0-rc.1__
+
+* fix: __properly_hint_string_generic_cleanup__
+
+* docs: __v0.6.0-rc.2__
+
+---------
+
+Co-authored-by: github-actions &lt;action@github.com&gt; ([`ca100dc`](https://github.com/dan1hc/fqr/commit/ca100dc63da2c6e54f3c9874d8846bde2a9f0145))
+
 ## v0.5.1 (2024-07-24)
 
 ### Fix
