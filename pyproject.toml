@@ -84,7 +84,6 @@ testpaths = ["src/tests"]
 
 [tool.mypy]
 exclude = [
-    "core/typ/obj\\.py$",
     "tests",
     ]
 files = ["./src/fqr"]
