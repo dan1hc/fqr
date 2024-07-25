@@ -72,14 +72,6 @@ class TestExceptions(unittest.TestCase):
     def test_06_serialization(self):
         """Test exc serializes correctly."""
 
-        exc = fqr.objects.exc.InvalidLogMessageTypeError(42)
-        dump = pickle.dumps(exc)
-        reloaded: fqr.core.typ.PackageExceptionType = pickle.loads(dump)
-        self.assertTupleEqual(exc.args, reloaded.args)
-
-    def test_07_serialization(self):
-        """Test exc serializes correctly."""
-
         exc = fqr.objects.exc.FieldAnnotationError('test', int)
         dump = pickle.dumps(exc)
         reloaded: fqr.core.typ.PackageExceptionType = pickle.loads(dump)

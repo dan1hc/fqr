@@ -2,11 +2,6 @@
 
 from .. import lib
 
-__all__ = (
-    'textwrap',
-    *lib.__all__
-    )
-
-import textwrap
+__all__ = lib.__all__
 
 from .. lib import *

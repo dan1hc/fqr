@@ -11,7 +11,6 @@ __all__ = (
     'InvalidContainerComparisonTypeError',
     'InvalidFieldAdditionError',
     'InvalidFieldRedefinitionError',
-    'InvalidLogMessageTypeError',
     'InvalidObjectComparisonError',
     'MissingTypeAnnotation',
     'ReservedKeywordError',
@@ -181,25 +180,6 @@ class InvalidContainerComparisonTypeError(
                     )
                 ),
             *(name, dtype, value)
-            )
-
-
-class InvalidLogMessageTypeError(BasePackageException[lib.t.Any]):
-    """
-    Error raised when a log message of invalid data type is passed.
-
-    """
-
-    def __init__(self, message: lib.t.Any):
-        super().__init__(
-            ' '.join(
-                (
-                    'fgr can only log: `dict, str, Object` types.',
-                    f"the following message of type: '{type(message)!s}' was passed.",
-                    f'message: {message!s}'
-                    )
-                ),
-            message
             )
 
 

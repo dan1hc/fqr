@@ -64,7 +64,8 @@ def is_snake_case_string(
 
     ---
 
-    Checks for strict [lower] `snake_case` (i.e. `python casing`).
+    Checks for strict [lower] `snake_case` (i.e. \
+    `python attribute casing`).
 
     """
 

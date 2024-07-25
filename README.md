@@ -249,8 +249,8 @@ class AgentFlea(fqr.Object):
     """Still a nuisance."""
 
     name: fqr.Field[str] = 'FLEA'
-    apiKey: fqr.Field[str] = '9ac868264f004600bdff50b7f5b3e8ad'
-    awsAccessKeyId: fqr.Field[str] = 'falsePositive'
+    api_key: fqr.Field[str] = '9ac868264f004600bdff50b7f5b3e8ad'
+    aws_access_key_id: fqr.Field[str] = 'falsePositive'
     sneaky: fqr.Field[str] = 'AKIARJFBAG3EGHFG2FPN'
 
 
@@ -267,8 +267,8 @@ print(AgentFlea())
 #   }
 # }
 # {
-#   "apiKey": "[ REDACTED :: API KEY ]",
-#   "awsAccessKeyId": "falsePositive",
+#   "api_key": "[ REDACTED :: API KEY ]",
+#   "aws_access_key_id": "falsePositive",
 #   "name": "FLEA",
 #   "sneaky": "[ REDACTED :: AWS ACCESS KEY ID ]"
 # }
@@ -276,8 +276,8 @@ print(AgentFlea())
 print(AgentFlea())
 # >>>
 # {
-#   "apiKey": "[ REDACTED :: API KEY ]",
-#   "awsAccessKeyId": "falsePositive",
+#   "api_key": "[ REDACTED :: API KEY ]",
+#   "aws_access_key_id": "falsePositive",
 #   "name": "FLEA",
 #   "sneaky": "[ REDACTED :: AWS ACCESS KEY ID ]"
 # }
@@ -307,8 +307,8 @@ class AgentFlea(fqr.Object):
     """Still a nuisance."""
 
     name: fqr.Field[str] = 'FLEA'
-    apiKey: fqr.Field[str] = '9ac868264f004600bdff50b7f5b3e8ad'
-    awsAccessKeyId: fqr.Field[str] = 'falsePositive'
+    api_key: fqr.Field[str] = '9ac868264f004600bdff50b7f5b3e8ad'
+    aws_access_key_id: fqr.Field[str] = 'falsePositive'
     sneaky: fqr.Field[str] = 'AKIARJFBAG3EGHFG2FPN'
 
 
@@ -320,7 +320,7 @@ print(AgentFlea())
 #   "log": fqr.core.log,
 #   "data":   {
 #     "message": "Call to print() silenced by fqr.",
-#     "printed": "{\n  \"apiKey\": \"[ REDACTED :: API KEY ]\",\n  \"awsAccessKeyId\": \"falsePositive\",\n  \"name\": \"FLEA\",\n  \"sneaky\": \"[ REDACTED :: AWS ACCESS KEY ID ]\"\n}"
+#     "printed": "{\n  \"api_key\": \"[ REDACTED :: API KEY ]\",\n  \"aws_access_key_id\": \"falsePositive\",\n  \"name\": \"FLEA\",\n  \"sneaky\": \"[ REDACTED :: AWS ACCESS KEY ID ]\"\n}"
 #   }
 # }
 
@@ -335,8 +335,8 @@ fqr.log.info(AgentFlea())
 #   "log": fqr.core.log,
 #   "data":   {
 #     "AgentFlea": {
-#       "apiKey": "[ REDACTED :: API KEY ]",
-#       "awsAccessKeyId": "falsePositive",
+#       "api_key": "[ REDACTED :: API KEY ]",
+#       "aws_access_key_id": "falsePositive",
 #       "name": "FLEA",
 #       "sneaky": "[ REDACTED :: AWS ACCESS KEY ID ]"
 #     }

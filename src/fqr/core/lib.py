@@ -13,6 +13,7 @@ __all__ = (
     're',
     'sys',
     't',
+    'textwrap',
     'types',
     'urllib',
     'LiteralString',
@@ -34,6 +35,7 @@ import os
 import re
 import sys
 import typing as t
+import textwrap
 import types
 import urllib.parse
 
