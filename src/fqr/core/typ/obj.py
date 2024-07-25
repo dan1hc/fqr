@@ -192,10 +192,6 @@ class ObjectLike(lib.t.Protocol):
         ) -> 'typ.SnakeDict | typ.CamelDict': ...
 
 
-class string(str, lib.t.Generic[StringType]):
-    """Generic `str` protocol."""
-
-
 FieldPattern = lib.re.compile(
     r'(fqr(\.[a-zA-Z]{1,32}){0,32}\.)?Field'
     r'\[((\[)?[\.\|\,a-zA-Z0-9_ ]{1,64}(\])?){1,64}\]'
@@ -205,3 +201,375 @@ WrapperPattern = lib.re.compile(
     r'([a-zA-Z]{1,64}\.?)?(Annotated|ClassVar|Final|InitVar)'
     r'\[((\[)?[\.\|\,a-zA-Z0-9_ ]{1,64}(\])?){1,64}\]'
     )
+
+
+class string(str, lib.t.Generic[StringType]):
+    """Generic `str` protocol."""
+
+    @lib.t.overload
+    def __new__(cls, object: object = ...) -> lib.Self: ...
+    @lib.t.overload
+    def __new__(
+        cls,
+        object: 'lib.builtins.ReadableBuffer',
+        encoding: str = ...,
+        errors: str = ...
+        ) -> lib.Self: ...
+    @lib.t.overload
+    def capitalize(self: lib.t.LiteralString) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def capitalize(self) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def casefold(self: lib.t.LiteralString) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def casefold(self) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def center(
+        self: lib.t.LiteralString,
+        width: lib.t.SupportsIndex,
+        fillchar: lib.t.LiteralString = " ",
+        /
+        ) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def center(
+        self,
+        width: lib.t.SupportsIndex,
+        fillchar: str = " ",
+        /
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def expandtabs(
+        self: lib.t.LiteralString,
+        tabsize: lib.t.SupportsIndex = 8
+        ) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def expandtabs(
+        self,
+        tabsize: lib.t.SupportsIndex = 8
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def format(
+        self: lib.t.LiteralString,
+        *args: lib.t.LiteralString,
+        **kwargs: lib.t.LiteralString
+        ) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def format(
+        self,
+        *args: object,
+        **kwargs: object
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    def format_map(
+        self,
+        mapping: 'lib.builtins._FormatMapMapping',
+        /
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def join(
+        self: lib.t.LiteralString,
+        iterable: lib.t.Iterable[lib.t.LiteralString],
+        /
+        ) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def join(
+        self,
+        iterable: 'lib.t.Iterable[string[StringType]]',
+        /
+        ) -> 'string[StringType]': ...
+    @lib.t.overload
+    def join(
+        self,
+        iterable: str,
+        /
+        ) -> 'string[lib.t.Any]': ...
+    @lib.t.overload
+    def ljust(
+        self: lib.t.LiteralString,
+        width: lib.t.SupportsIndex,
+        fillchar: lib.t.LiteralString = " ",
+        /
+        ) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def ljust(
+        self,
+        width: lib.t.SupportsIndex,
+        fillchar: str = " ",
+        /
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def lower(self: lib.t.LiteralString) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def lower(self) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def lstrip(
+        self: lib.t.LiteralString,
+        chars: lib.t.LiteralString | None = None,
+        /
+        ) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def lstrip(
+        self,
+        chars: str | None = None,
+        /
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def partition(
+        self: lib.t.LiteralString,
+        sep: lib.t.LiteralString,
+        /
+        ) -> tuple[
+            lib.t.LiteralString,
+            lib.t.LiteralString,
+            lib.t.LiteralString
+            ]: ...
+    @lib.t.overload
+    def partition(self, sep: str, /) -> tuple[
+        'lib.t.Self[StringType] | string[lib.t.Any]', 
+        'lib.t.Self[StringType] | string[lib.t.Any]', 
+        'lib.t.Self[StringType] | string[lib.t.Any]'
+        ]: ...
+    if lib.sys.version_info >= (3, 13):  # pragma: no cover
+        @lib.t.overload
+        def replace(
+            self: lib.t.LiteralString,
+            old: lib.t.LiteralString,
+            new: lib.t.LiteralString,
+            /,
+            count: lib.t.SupportsIndex = -1
+        ) -> lib.t.LiteralString: ...
+        @lib.t.overload
+        def replace(
+            self,
+            old: str,
+            new: str,
+            /,
+            count: lib.t.SupportsIndex = -1
+            ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    else:  # pragma: no cover
+        @lib.t.overload
+        def replace(
+            self: lib.t.LiteralString,
+            old: lib.t.LiteralString,
+            new: lib.t.LiteralString,
+            count: lib.t.SupportsIndex = -1,
+            /
+        ) -> lib.t.LiteralString: ...
+        @lib.t.overload
+        def replace(
+            self,
+            old: str,
+            new: str,
+            count: lib.t.SupportsIndex = -1,
+            /
+            ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    if lib.sys.version_info >= (3, 9):
+        @lib.t.overload
+        def removeprefix(
+            self: lib.t.LiteralString,
+            prefix: lib.t.LiteralString,
+            /
+            ) -> lib.t.LiteralString: ...
+        @lib.t.overload
+        def removeprefix(
+            self,
+            prefix: str,
+            /
+            ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+        @lib.t.overload
+        def removesuffix(
+            self: lib.t.LiteralString,
+            suffix: lib.t.LiteralString,
+            /
+            ) -> lib.t.LiteralString: ...
+        @lib.t.overload
+        def removesuffix(
+            self,
+            suffix: str,
+            /
+            ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+
+    @lib.t.overload
+    def rjust(
+        self: lib.t.LiteralString,
+        width: lib.t.SupportsIndex,
+        fillchar: lib.t.LiteralString = " ",
+        /
+        ) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def rjust(
+        self,
+        width: lib.t.SupportsIndex,
+        fillchar: str = " ",
+        /
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def rpartition(
+        self: lib.t.LiteralString,
+        sep: lib.t.LiteralString,
+        /
+        ) -> tuple[
+            lib.t.LiteralString,
+            lib.t.LiteralString,
+            lib.t.LiteralString
+            ]: ...
+    @lib.t.overload
+    def rpartition(
+        self,
+        sep: str,
+        /
+        ) -> tuple[
+            'lib.t.Self[StringType] | string[lib.t.Any]', 
+            'lib.t.Self[StringType] | string[lib.t.Any]', 
+            'lib.t.Self[StringType] | string[lib.t.Any]'
+            ]: ...
+    @lib.t.overload
+    def rsplit(
+        self: lib.t.LiteralString,
+        sep: lib.t.LiteralString | None = None,
+        maxsplit: lib.t.SupportsIndex = -1
+        ) -> list[lib.t.LiteralString]: ...
+    @lib.t.overload
+    def rsplit(
+        self,
+        sep: str | None = None,
+        maxsplit: lib.t.SupportsIndex = -1
+        ) -> 'list[lib.t.Self[StringType] | string[lib.t.Any]]': ...
+    @lib.t.overload
+    def rstrip(
+        self: lib.t.LiteralString,
+        chars: lib.t.LiteralString | None = None,
+        /
+        ) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def rstrip(
+        self,
+        chars: str | None = None,
+        /
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def split(
+        self: lib.t.LiteralString,
+        sep: lib.t.LiteralString | None = None,
+        maxsplit: lib.t.SupportsIndex = -1
+        ) -> list[lib.t.LiteralString]: ...
+    @lib.t.overload
+    def split(
+        self,
+        sep: str | None = None,
+        maxsplit: lib.t.SupportsIndex = -1
+        ) -> 'list[lib.t.Self[StringType] | string[lib.t.Any]]': ...
+    @lib.t.overload
+    def splitlines(
+        self: lib.t.LiteralString,
+        keepends: bool = False
+        ) -> list[lib.t.LiteralString]: ...
+    @lib.t.overload
+    def splitlines(
+        self,
+        keepends: bool = False
+        ) -> 'list[lib.t.Self[StringType] | string[lib.t.Any]]': ...
+    @lib.t.overload
+    def strip(
+        self: lib.t.LiteralString,
+        chars: lib.t.LiteralString | None = None,
+        /
+        ) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def strip(
+        self,
+        chars: str | None = None,
+        /
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def swapcase(self: lib.t.LiteralString) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def swapcase(self) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def title(self: lib.t.LiteralString) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def title(self) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    def translate(
+        self,
+        table: 'lib.builtins._TranslateTable',
+        /
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def upper(self: lib.t.LiteralString) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def upper(self) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def zfill(
+        self: lib.t.LiteralString,
+        width: lib.t.SupportsIndex,
+        /
+        ) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def zfill(
+        self,
+        width: lib.t.SupportsIndex,
+        /
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def __add__(
+        self: lib.t.LiteralString,
+        value: lib.t.LiteralString,
+        /
+        ) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def __add__(
+        self,
+        value: str,
+        /
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    def __getitem__(
+        self,
+        key: lib.t.SupportsIndex | slice,
+        /
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def __iter__(
+        self: lib.t.LiteralString
+        ) -> lib.t.Iterator[lib.t.LiteralString]: ...
+    @lib.t.overload
+    def __iter__(
+        self
+        ) -> 'lib.t.Iterator[lib.t.Self[StringType] | string[lib.t.Any]]': ...
+    @lib.t.overload
+    def __mod__(
+        self: lib.t.LiteralString,
+        value: lib.t.LiteralString | tuple[lib.t.LiteralString, ...],
+        /
+        ) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def __mod__(
+        self,
+        value: lib.t.Any,
+        /
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def __mul__(
+        self: lib.t.LiteralString,
+        value: lib.t.SupportsIndex,
+        /
+        ) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def __mul__(
+        self,
+        value: lib.t.SupportsIndex,
+        /
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    @lib.t.overload
+    def __rmul__(
+        self: lib.t.LiteralString,
+        value: lib.t.SupportsIndex,
+        /
+        ) -> lib.t.LiteralString: ...
+    @lib.t.overload
+    def __rmul__(
+        self,
+        value: lib.t.SupportsIndex,
+        /
+        ) -> 'lib.t.Self[StringType] | string[lib.t.Any]': ...
+    def __getnewargs__(
+        self
+        ) -> 'tuple[lib.t.Self[StringType] | string[lib.t.Any]]': ...

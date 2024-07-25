@@ -83,7 +83,10 @@ addopts = "--cov=fqr --cov-report=term-missing -p no:warnings -x"
 testpaths = ["src/tests"]
 
 [tool.mypy]
-exclude = ["tests"]
+exclude = [
+    "core/typ/obj",
+    "tests",
+    ]
 files = ["./src/fqr"]
 pretty = true
 python_version = "3.12"

@@ -44,6 +44,8 @@ repos:
     rev: "v1.11.0"
     hooks:
       - id: mypy
+        entry: python -m mypy
+        language: system
         pass_filenames: false
         stages: [pre-commit]
 

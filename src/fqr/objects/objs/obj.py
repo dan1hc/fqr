@@ -452,11 +452,13 @@ class ObjectBase(metaclass=metas.Meta):
 
         """
 
+        k_: typ.string[typ.snake_case]
         return lib.t.KeysView(
             {
-                k.rstrip('_'): v  # type: ignore[misc]
+                k_: v
                 for k, v
                 in cls.__dataclass_fields__.items()
+                if (k_ := k.rstrip('_'))
                 }
             )
 
@@ -618,10 +620,12 @@ class ObjectBase(metaclass=metas.Meta):
                 in as_dict.items()
                 }
         else:
+            k_: typ.string[typ.snake_case]
             snake_dict: typ.SnakeDict = {
-                k.rstrip('_'): v  # type: ignore[misc]
+                k_: v
                 for k, v
                 in as_dict.items()
+                if (k_ := k.rstrip('_'))
                 }
             return snake_dict
 
@@ -908,7 +912,7 @@ class Object(ObjectBase):
 
     """
 
-    class_as_dict: lib.t.Final[
+    class_as_dict: lib.t.ClassVar[
         lib.t.Optional[dict[typ.string[typ.snake_case], lib.t.Any]]
         ] = None
     """

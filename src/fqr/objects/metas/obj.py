@@ -302,7 +302,8 @@ class Meta(type):
                 __value['default']
                 )
         elif k is not None:
-            cls.__dataclass_fields__[k].update(__value)  # type: ignore[arg-type]
+            value_: 'fields_.Field[lib.t.Any]' = __value
+            cls.__dataclass_fields__[k].update(value_)  # type: ignore[arg-type]
             return None
         else:
             raise exc.InvalidFieldAdditionError(__key)
