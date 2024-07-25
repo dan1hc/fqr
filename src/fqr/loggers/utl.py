@@ -36,7 +36,7 @@ def parse_incoming_log_message(
 def parse_incoming_log_message(
     msg: lib.t.Any,
     level: lib.t.Literal[30]
-    ) -> typ.LogRecord | typ.LogRecordWithPrint | lib.t.Never: ...
+    ) -> typ.LogRecord | typ.LogRecordWithPrint | lib.Never: ...
 @lib.t.overload
 def parse_incoming_log_message(
     msg: lib.t.Any,
@@ -47,7 +47,7 @@ def parse_incoming_log_message(
         | lib.t.Literal[40]
         | lib.t.Literal[50]
         )
-    ) -> typ.LogRecord | lib.t.Never: ...
+    ) -> typ.LogRecord | lib.Never: ...
 def parse_incoming_log_message(
     msg: lib.t.Any,
     level: (
@@ -58,7 +58,7 @@ def parse_incoming_log_message(
         | lib.t.Literal[40]
         | lib.t.Literal[50]
         )
-    ) -> typ.LogRecord | typ.LogRecordWithPrint | lib.t.Never:
+    ) -> typ.LogRecord | typ.LogRecordWithPrint | lib.Never:
     """
     Parse incoming log message or warning to dict format.
 
