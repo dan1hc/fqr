@@ -37,16 +37,20 @@ __all__ = (
     'cli',
     'core',
     'docs',
+    'log',
+    'loggers',
     'objects',
     'Field',
     'Object'
     )
 
-__version__ = '0.6.0'
+__version__ = '0.7.0-rc.1'
 
 from . import cli
 from . import core
 from . import docs
+from . import loggers
 from . import objects
 
+from . loggers import log
 from . objects import Field, Object

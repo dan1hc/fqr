@@ -35,6 +35,24 @@ class Constants:
     UNDEFINED = f'[[{PACAKGE.upper()}_DEFAULT_PLACEHOLDER]]'
     """Placeholder for undefined values that should not be `None`."""
 
+    ENV = lib.os.getenv('ENV', 'local').lower()
+    """The lowered name of our runtime environment."""
+
+    DEPLOY_ENVS = (
+        'dev',
+        'develop',
+        'qa',
+        'test',
+        'testing',
+        'stg',
+        'stage',
+        'staging',
+        'uat',
+        'prod',
+        'production',
+        )
+    """Valid, non-local runtime environment names."""
+
     DELIM_REBASE = '_X_'
 
     __ANNOTATIONS__: 'typ.string[typ.snake_case]' = '__annotations__'

@@ -54,7 +54,8 @@ class Pattern:
 
     snake_case = lib.re.compile(r'^[a-z0-9_]{1,4096}$')
     """
-    Matches strict [lower] snake_case (i.e. python casing).
+    Matches strict [lower] snake_case (i.e. python instance \
+    / attribute / function casing).
 
     ---
 
