@@ -234,7 +234,12 @@ def _monkey_log(
     else:  # pragma: no cover
         fn, lno, func = "(unknown file)", 0, "(unknown function)"
 
-    msg_dict = utl.parse_incoming_log_message(msg, level)
+    if msg == '%s' and args and isinstance(args, tuple):  # pragma: no cover
+        msg_ = args[0]
+    else:
+        msg_ = msg
+
+    msg_dict = utl.parse_incoming_log_message(msg_, level)
 
     if isinstance(exc_info, BaseException):
         exc_info = (type(exc_info), exc_info, exc_info.__traceback__)
